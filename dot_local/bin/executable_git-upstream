@@ -1,0 +1,110 @@
+#!/bin/bash
+
+# Define colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Define GitHub username
+github_username="mauvehed"
+
+# Define the directory path
+directory_path=~/gitwork/github/*/*
+
+# Function to check if the directory exists
+check_directory_exists() {
+    # Disable globbing to handle cases where the directory path might not exist
+    shopt -s nullglob
+    files=($directory_path)
+    if [ ${#files[@]} -eq 0 ]; then
+        echo -e "${RED}No directories found in $directory_path.${NC}"
+        exit 1
+    fi
+    shopt -u nullglob
+}
+
+# Function to check if an upstream remote is defined
+check_upstream_remote() {
+    if ! git remote -v | grep -q "upstream"; then
+        echo -e "${YELLOW}No upstream remote defined. Skipping this directory.${NC}"
+        return 1
+    fi
+}
+
+# Function to check if the current repository is a fork
+check_fork_repo() {
+    if ! git remote -v | grep -q "origin.*(fetch)"; then
+        echo -e "${YELLOW}This repository is not a fork. Skipping this directory.${NC}"
+        return 1
+    fi
+}
+
+# Function to check if the origin repository belongs to the user
+check_origin_owner() {
+    # Extract owner and repository name from the origin URL
+    owner=$(git remote get-url origin | cut -d':' -f2 | cut -d'/' -f1)
+    repo=$(git remote get-url origin | cut -d':' -f2 | cut -d'/' -f2 | cut -d'.' -f1)
+
+    # Check if the owner matches the GitHub username
+    if [ "$owner" != "$github_username" ]; then
+        echo -e "${YELLOW}This repository does not belong to $github_username. Skipping this directory.${NC}"
+        return 1
+    fi
+}
+
+# Function to check if the current branch is either main or master
+check_main_or_master_branch() {
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$current_branch" != "main" ]; then
+        if [ "$current_branch" != "master" ]; then
+            echo -e "${YELLOW}Switching to main branch...${NC}"
+            git checkout main && return || \
+            { echo -e "${RED}Failed to switch to main branch.${NC}"; check_master_branch; }
+        fi
+    fi
+}
+
+# Function to check if the current branch is master
+check_master_branch() {
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    if [ "$current_branch" != "master" ]; then
+        echo -e "${YELLOW}Switching to master branch...${NC}"
+        git checkout master || { echo -e "${RED}Failed to switch to master branch.${NC}"; exit 1; }
+    fi
+}
+
+# Function to pull new commits from upstream/main or upstream/master
+pull_upstream_branch() {
+    echo -e "${YELLOW}Pulling new commits from upstream/branch...${NC}"
+    git pull upstream "$1" || { echo -e "${RED}Failed to pull upstream/$1.${NC}"; exit 1; }
+}
+
+# Function to reset local branch to match upstream/main or upstream/master
+reset_local_branch() {
+    echo -e "${YELLOW}Resetting local $1 branch to match upstream/$1...${NC}"
+    git reset --hard upstream/"$1" || { echo -e "${RED}Failed to reset local $1.${NC}"; exit 1; }
+}
+
+# Function to force push changes to origin main or origin master
+force_push_origin_branch() {
+    echo -e "${YELLOW}Force pushing changes to origin $1...${NC}"
+    git push origin "$1" --force || { echo -e "${RED}Failed to force push to origin $1.${NC}"; exit 1; }
+}
+
+# Main script
+check_directory_exists
+for directory in $directory_path; do
+    cd "$directory" || { echo -e "${RED}Failed to change directory to $directory${NC}"; continue; }
+    echo -e "${GREEN}Current directory: $(pwd)${NC}"
+    if ! check_fork_repo || ! check_upstream_remote || ! check_origin_owner; then
+        continue
+    fi
+    check_main_or_master_branch
+    pull_upstream_branch "$current_branch"
+    reset_local_branch "$current_branch"
+    force_push_origin_branch "$current_branch"
+    echo -e "\n${YELLOW}--------------------------------------------------${NC}\n"
+done
+
+echo -e "${GREEN}Script executed successfully.${NC}"
