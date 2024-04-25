@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Function to update Git repository
+update_git_repo() {
+    local repo_dir="$1"
+    echo "Updating repository: $repo_dir"
+    if [ -d "$repo_dir" ]; then
+        (
+            cd "$repo_dir" || exit
+            pwd
+            if git pull; then
+                echo "Update successful: $repo_dir"
+            else
+                echo "Failed to update: $repo_dir"
+            fi
+        )
+    else
+        echo "Directory not found: $repo_dir"
+    fi
+}
+
+# Export the function to make it available to parallel
+export -f update_git_repo
+
+# Update repositories in parallel
+find ~/gitwork/github -mindepth 2 -type d -print0 | parallel -0 update_git_repo

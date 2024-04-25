@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Function to update Git user configuration
+update_git_config() {
+    local directory="$1"
+    local username="$2"
+    local email="$3"
+
+    if [ -d "$directory" ]; then
+        for repo_dir in "$directory"/*; do
+            if [ -d "$repo_dir" ]; then
+                (
+                    cd "$repo_dir" || exit
+                    git config user.name "$username"
+                    git config user.email "$email"
+                )
+            fi
+        done
+        echo "[*] Updated repositories in $directory"
+    else
+        echo "[!] Directory $directory does not exist"
+    fi
+}
+
+# Update configurations for mauvehed repositories
+update_git_config "~/gitwork/github/mauvehed" "mauvehed" "nate@mvh.dev"
+
+# Update configurations for attrition-org repositories
+update_git_config "~/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"

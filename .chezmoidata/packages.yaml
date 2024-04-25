@@ -1,0 +1,123 @@
+packages:
+    core:
+        taps:
+        - 'homebrew/bundle'
+        - 'homebrew/services'
+        brews:
+        - 'age'
+        - 'asdf'
+        - 'bat'
+        - 'btop'
+        - 'curl'
+        - 'chezmoi'
+        - 'coreutils'
+        - 'direnv'
+        - 'eza'
+        - 'fzf'
+        - 'git'
+        - 'grep'
+        - 'htop'
+        - 'jq'
+        - 'jless'
+        - 'mdless'
+        - 'mosh'
+        - 'mtr'
+        - 'ncdu'
+        - 'neofetch'
+        - 'nmap'
+        - 'pre-commit'
+        - 'slides'
+        - 'tldr'
+        - 'tmux'
+        - 'tree'
+        - 'vim'
+        - 'wget'
+        - 'zoxide'
+        - 'zsh'
+        casks:
+        asdf:
+        - 'nodejs'
+        - 'python'
+        - 'golang'
+        - 'ruby'
+        npm:
+        pip:
+    personal:
+        core:
+            taps:
+            brews:
+            - 'gh'
+            - 'gitleaks'
+            - 'gnupg'
+            casks:
+            npm:
+            - opencommit
+            pip:
+        darwin:
+            taps:
+            - 'snyk/tap'
+            - 'teamookla/speedtest'
+            brews:
+            - 'awscli'
+            - 'dockutil'
+            - 'ffmpeg'
+            - 'flyctl'
+            - 'iperf3'
+            - 'netlify-cli'
+            - 'nuclei'
+            - 'openssl@3'
+            - 'pinentry-mac'
+            - 'poetry'
+            - 'readline'
+            - 'ripgrep'
+            - 'rsync'
+            - 'semgrep'
+            - 'snyk/tap/snyk'
+            - 'sqlite'
+            - 'teamookla/speedtest/speedtest'
+            - 'telnet'
+            - 'yt-dlp'
+            - 'xz'
+            - 'zlib'
+            casks:
+            - 'balenaetcher'
+            - 'google-chrome'
+            - 'signal'
+            - 'stats'
+            - 'tailscale'
+            - 'visual-studio-code'
+            - 'vlc'
+        linux:
+            taps:
+            brews:
+            casks:
+    work:
+        core:
+            taps:
+            brews:
+            - 'gh'
+            - 'gitleaks'
+            casks:
+            npm:
+            pip:
+        darwin:
+            taps:
+            brews:
+            casks:
+        linux:
+            taps:
+            brews:
+            casks:
+    darwin:
+        taps:
+        - '1password/tap'
+        brews:
+        - 'podman'
+        casks:
+        - '1password-cli'
+        - 'podman-desktop'
+        - 'warp'
+    linux:
+        taps:
+        brews:
+        casks:

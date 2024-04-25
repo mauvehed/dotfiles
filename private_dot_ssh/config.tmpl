@@ -1,0 +1,23 @@
+########################
+# GLOBAL
+########################
+Host *
+  Compression yes
+  ServerAliveInterval 60
+  ServerAliveCountMax 10
+  IdentitiesOnly yes
+  #ControlMaster auto
+  #ControlPath /tmp/ssh-%r@%h:%p
+  #ControlPersist yes
+  {{ if eq .osid "darwin" }}
+  UseKeychain yes
+  # 1password ssh-agent
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  {{ end }}
+  AddKeysToAgent yes
+  ForwardAgent no
+  IdentityFile ~/.ssh/id_ed25519_primary
+
+{{ if .personal }}
+{{ onepasswordRead "op://Personal/SSH Config/notesPlain" }}
+{{ end }}

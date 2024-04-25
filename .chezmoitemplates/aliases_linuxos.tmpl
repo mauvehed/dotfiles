@@ -1,0 +1,14 @@
+
+############################ Begin .aliases_linuxos ############################
+
+alias clt="/home/linuxbrew/.linuxbrew/bin/clear;echo '===============================================================================';llc /mnt/titan/media/Downloads/TV/|tail -25;echo '===============================================================================';llc /mnt/titan/media/Downloads/Movies/|tail -12;echo '=============================================================================='"
+alias gpn_start_default="/usr/bin/sudo openvpn --config /etc/openvpn/nate-laptop-two.ovpn 2>&1 > /dev/null"
+alias gpn_start_noroute="/usr/bin/sudo openvpn --config /etc/openvpn/nate-laptop-two.ovpn 2>&1 > /dev/null"
+alias gpn_stop="/usr/bin/sudo /usr/bin/killall openvpn"
+alias path="echo -e ${PATH//:/\\n}"
+alias reload="exec ${SHELL} -l"
+alias upd="/usr/bin/sudo /usr/bin/apt update && /usr/bin/sudo /usr/bin/apt -y dist-upgrade && /usr/bin/sudo /usr/bin/apt -y autoremove"
+alias upall="/home/linuxbrew/.linuxbrew/bin/brew update && brew upgrade && ~/bin/git-config && ~/bin/git-update && chezmoi -R update"
+{{ if stat "/home/linuxbrew/.linuxbrew/bin/chezmoi" }}alias cz="/home/linuxbrew/.linuxbrew/bin/chezmoi"
+{{ else if stat "$HOME/.local/share/bin/chezmoi" }}alias cz="$HOME/.local/share//bin/chezmoi"
+{{ else }}alias cz="$(which chezmoi)"{{ end }}

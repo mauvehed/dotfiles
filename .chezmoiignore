@@ -1,0 +1,19 @@
+LICENSE
+README.md
+docs/
+.pre-commit-config.yaml
+{{ if eq .osid "windows" }}
+*.sh
+Library
+{{ end }}
+
+{{ if eq .osid "linux" }}
+# {{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+AppData
+Library
+# {{   end }}
+{{ end }}
+
+{{ if eq .osid "darwin" }}
+AppData
+{{ end }}

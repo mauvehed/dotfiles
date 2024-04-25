@@ -1,0 +1,21 @@
+#!/bin/bash
+
+{{ template "utils" . }}
+
+{{ if eq .osid "darwin" }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{ else if eq .osid "linux" }}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{ end }}
+
+{{ if lookPath "brew" }}
+brew update
+{{ else }}
+{{   if eq .osid "darwin" }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{   else if eq .osid "linux" }}
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+{{   end }}
+{{ end }}
+
+{{ template "brew" . }}

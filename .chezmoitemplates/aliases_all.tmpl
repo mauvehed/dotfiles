@@ -1,0 +1,20 @@
+############################ Begin .aliases_all ############################
+alias ctop='docker run --rm -ti -l com.centurylinklabs.watchtower.enable=false -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop:latest'
+alias czup='cz update -R -a && source ~/.aliases && cz update -R -a'
+alias fp='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"'
+alias irpg="/usr/bin/ssh -i ~/.ssh/id_rsa_bperry_shell mvhd@volatileminds.net"
+alias gpgtest="echo 'test' | gpg --clearsign"
+alias moshb='mosh --server=/usr/bin/mosh-server $*'
+alias moshl='mosh --server=/usr/local/bin/mosh-server $*'
+alias myip="/usr/bin/curl https://yourip.app/raw"
+alias upall="/opt/homebrew/bin/brew update && /opt/homebrew/bin/brew upgrade && ~/.local/bin/git-config && ~/.local/bin/git-update && /opt/homebrew/bin/chezmoi -R update"
+alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal time: %{time_total}\nHTTP status: %{http_code}\n" $1'
+{{ if lookPath "tldr" }}alias man="tldr"{{ end }}
+{{ if lookPath "bat" }}alias cat="bat"{{ end }}
+{{ if lookPath "zoxide" }}alias cd="z"{{ end }}
+{{ if lookPath "eza" }}alias ls="eza --color=always"{{ end }}
+{{ if lookPath "eza" }}alias lsn="eza"{{ end }}
+{{ if lookPath "eza" }}alias llc="eza --color=always -lars created"{{ end }}
+{{ if lookPath "shred" }}alias shred="shred -zvu -n 5"{{ end }}
+{{ if lookPath "vim" }}alias vi="vim"{{ end }}
+{{ if lookPath "podman" }}alias docker="podman"{{ end }}

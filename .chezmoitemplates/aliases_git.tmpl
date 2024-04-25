@@ -1,0 +1,20 @@
+
+############################ Begin .aliases_git ############################
+alias ga="git add"
+alias gdb="gdb -q"
+alias grep="grep --color=auto"
+alias gb="git branch"
+alias gbc="git checkout -b"
+alias gba="git branch -a"
+{{ if lookPath "oco" }}alias gc="oco"{{ else }}alias gc="git commit -v"{{ end }}
+alias gca="git commit -a"
+alias gco="git checkout"
+alias gca="git commit -av"
+alias gd="git diff "
+alias gl="git pull"
+alias gp="git push"
+alias gst="git status -uno"
+alias gsi="git status --ignored"
+alias gtree="git log --graph --pretty=oneline --abbrev-commit"
+alias gup="git checkout main && git fetch --all && git reset --hard upstream/main"
+alias gf="git-fuzzy"

@@ -1,0 +1,62 @@
+{{ $gitArgs := "clone.args = ['--depth', '1']\n    pull.args = ['--ff-only']" }}
+
+### oh-my-zsh
+[".oh-my-zsh"]
+  type = "git-repo"
+  url = "https://github.com/ohmyzsh/ohmyzsh.git"
+  exact = true
+  refreshPeriod = "72h"
+[".oh-my-zsh/custom/plugins/zsh-syntax-highlighting"]
+  type = "git-repo"
+  url = "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+  exact = true
+  refreshPeriod = "72h"
+[".oh-my-zsh/custom/themes/powerlevel10k"]
+  type = "git-repo"
+  url = "https://github.com/romkatv/powerlevel10k.git"
+  exact = true
+  refreshPeriod = "72h"
+[".oh-my-zsh/custom/plugins/zsh-nvm"]
+  type = "git-repo"
+  url = "https://github.com/lukechilds/zsh-nvm.git"
+  exact = true
+  refreshPeriod = "72h"
+
+### fzf
+[".local/share/fzf/fzf-git.bash"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh"
+[".local/share/fzf/fzf-tmux.bash"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux"
+[".local/share/zsh/site-functions/fzf.zsh"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh"
+[".local/share/zsh/site-functions/fzf-key-bindings.zsh"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh"
+
+### tmux
+[".tmux/plugins/tpm"]
+  type = "git-repo"
+  url = "https://github.com/tmux-plugins/tpm.git"
+  exact = true
+  refreshPeriod = "72h"
+
+### vim
+[".vim/bundle/auto-pairs"]
+  type = "git-repo"
+  url = "https://github.com/jiangmiao/auto-pairs.git"
+  exact = true
+  refreshPeriod = "72h"
+
+### git fuzzy
+[".local/share/git-fuzzy"]
+    type = "git-repo"
+    url = "https://github.com/bigH/git-fuzzy.git"
+    {{ $gitArgs }}
+
+### Dracula themes
+[".local/share/zsh/site-functions/exa_colors.zshrc"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/dracula/exa/main/exa_colors.zshrc"
