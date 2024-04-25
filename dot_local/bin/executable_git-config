@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Define colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
 # Function to update Git user configuration
 update_git_config() {
     local directory="$1"
@@ -13,17 +19,18 @@ update_git_config() {
                     cd "$repo_dir" || exit
                     git config user.name "$username"
                     git config user.email "$email"
+                    echo -e "${YELLOW}Updated Git user configuration for $(basename "$repo_dir")${NC}"
                 )
             fi
         done
-        echo "[*] Updated repositories in $directory"
+        echo -e "${GREEN}[*] Updated repositories in $directory${NC}"
     else
-        echo "[!] Directory $directory does not exist"
+        echo -e "${RED}[!] Directory $directory does not exist${NC}"
     fi
 }
 
 # Update configurations for mauvehed repositories
-update_git_config "~/gitwork/github/mauvehed" "mauvehed" "nate@mvh.dev"
+update_git_config "$HOME/gitwork/github/mauvehed" "mauvehed" "nate@mvh.dev"
 
 # Update configurations for attrition-org repositories
-update_git_config "~/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"
+update_git_config "$HOME/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"
