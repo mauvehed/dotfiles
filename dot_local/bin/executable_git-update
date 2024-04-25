@@ -1,26 +1,43 @@
 #!/bin/bash
 
-# Function to update Git repository
-update_git_repo() {
-    local repo_dir="$1"
-    echo "Updating repository: $repo_dir"
-    if [ -d "$repo_dir" ]; then
-        (
-            cd "$repo_dir" || exit
-            pwd
-            if git pull; then
-                echo "Update successful: $repo_dir"
-            else
-                echo "Failed to update: $repo_dir"
-            fi
-        )
-    else
-        echo "Directory not found: $repo_dir"
+# Define colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Check if the directory exists
+if [ ! -d ~/gitwork/github ]; then
+    echo -e "${RED}Directory ~/gitwork/github does not exist.${NC}"
+    exit 1
+fi
+
+# Function to check if the directory exists
+check_directory_exists() {
+    if [ ! -d "$1" ]; then
+        echo -e "${RED}Directory $1 does not exist.${NC}"
+        return 1
     fi
 }
 
-# Export the function to make it available to parallel
-export -f update_git_repo
+# Function to pull changes from git
+pull_changes() {
+    echo -e "${YELLOW}Pulling changes from git...${NC}"
+    git pull || { echo -e "${RED}Failed to pull changes from git.${NC}"; exit 1; }
+}
 
-# Update repositories in parallel
-find ~/gitwork/github -mindepth 2 -type d -print0 | parallel -0 update_git_repo
+# Main script
+for directory in ~/gitwork/github/*/*; do
+    if [ -d "$directory" ]; then
+        # Change directory and print the path
+        cd "$directory" || { echo -e "${RED}Failed to change directory to $directory${NC}"; continue; }
+        echo -e "${GREEN}Current directory: $(pwd)${NC}"
+
+        # Pull changes from git
+        pull_changes
+
+        # Return to the main directory
+        cd ~/gitwork/github/ || { echo -e "${RED}Failed to change directory back to ~/gitwork/github/${NC}"; exit 1; }
+        echo
+    fi
+done
