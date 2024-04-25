@@ -28,10 +28,13 @@
 #
 # More examples can be found here:
 #  https://developer.1password.com/docs/ssh/agent/config
+#
+# for acocunt/repo auth via SSH
 [[ssh-keys]]
 item = "id_ed25519_primary"
 vault = "Personal"
 
+# for code signing via SSH
 [[ssh-keys]]
 item = "id_ed25519_github"
 vault = "Personal"
