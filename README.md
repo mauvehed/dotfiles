@@ -18,6 +18,7 @@ After installation or major changes you may need to relogin to 1Password with:
 ```
 
 ## Tools Used
+
 | Name | Description | Required |
 | ---- | ----------- | -------- |
 | Terminal | [Warp](https://warp.dev) | No |
@@ -26,7 +27,6 @@ After installation or major changes you may need to relogin to 1Password with:
 | Zsh theme         | [powerlevel10k](https://github.com/romkatv/powerlevel10k) | Yes |
 | Dotfiles manager  | [chezmoi](https://chezmoi.io/) | Yes |
 | Password Manager  | [1password](https://www.1password.com/) | Yes |
-
 
 ## Command Reference
 
@@ -55,12 +55,14 @@ To test chezmoi template files (.tmpl):
 
 To execute git commands within the chezmoi source director you can append them to the *chezmoi* command
 
+Git pull:
 > `chezmoi git pull`
 
+Git push:
 > `chezmoi git push`
 
+Git status:
 > `chezmoi git status`
-
 
 ## Resources
 
