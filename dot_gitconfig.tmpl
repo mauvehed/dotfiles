@@ -1,31 +1,31 @@
 [user]
-	name = {{ .name }}
-	email = {{ .email }}
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP
+  name = {{ .name }}
+  email = {{ .email }}
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP
 [color]
-	ui = true
+  ui = true
 [core]
-	editor = vim
-	eol = lf
-	autocrlf = input
-	excludesFile = ~/.gitignore_global
+  editor = vim
+  eol = lf
+  autocrlf = input
+  excludesFile = ~/.gitignore_global
 [push]
-	default = simple
-	autoSetupRemote = true
+  default = simple
+  autoSetupRemote = true
 [filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [commit]
-	{{ if eq .osid "darwin" }}gpgSign = true{{ else }}gpgSign = false{{ end }}
+  {{ if eq .osid "darwin" }}gpgSign = true{{ else }}gpgSign = false{{ end }}
 [pull]
-	rebase = false
+  rebase = false
 [gpg]
-	format = ssh
+  format = ssh
 {{ if eq .osid "darwin" }}[gpg "ssh"]
-	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"{{ end }}
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"{{ end }}
 [tag]
-	forceSignAnnotated = false
+  forceSignAnnotated = false
 [init]
-	defaultBranch = main
+  defaultBranch = main
