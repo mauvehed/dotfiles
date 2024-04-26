@@ -33,8 +33,9 @@
 [[ssh-keys]]
 item = "id_ed25519_primary"
 vault = "Personal"
-
+{{ if and ( eq .osid "darwin" ) .personal }}
 # for code signing via SSH
 [[ssh-keys]]
 item = "id_ed25519_github"
 vault = "Personal"
+{{ end }}
