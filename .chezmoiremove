@@ -26,10 +26,10 @@ Brewfile*
 .swp
 .tsh
 .wget-hsts
-.viminfo
+#.viminfo
 .vim_mru_files/
 .vim_runtime/
 .vimrc*
 .wakatime*
-.zcompdump*
+#.zcompdump*
 .zshrc.pre-oh-my-zsh
