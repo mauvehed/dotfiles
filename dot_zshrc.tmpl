@@ -61,7 +61,7 @@ unset HISTFILE
 # Set ohmyzsh plugins use
 plugins=(
   {{ if eq .osid "darwin" }}macos{{ end }}
-  {{ if eq .osid "linux" }}ssh-agent{{ end }}
+  {{ if and (eq .osid "linux") not .personal }}ssh-agent{{ end }}
   {{ if .personal }}1password{{ end }}
   aliases
   tmux
