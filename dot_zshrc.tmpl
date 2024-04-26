@@ -47,14 +47,6 @@ export ZSH=$HOME/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-  autoload -Uz compinit
-  compinit
-fi
-
 # Don't track shell history
 unset HISTFILE
 
@@ -97,3 +89,11 @@ source ~/.aliases
 
 # dracula theme for eza/exa
 [ -f ~/.local/share/zsh/site-functions/exa_colors.zshrc ] && . ~/.local/share/zsh/site-functions/exa_colors.zshrc
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  # initialise completions with ZSH's compinit
+  autoload -Uz compinit && compinit
+fi
