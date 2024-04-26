@@ -1,2 +1,2 @@
 {{if and (eq .osid "darwin") .personal}}ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA6jF+UCZq+8OasSp755mWgIxSVkWBlTHt6s0yZPaXeS
-{{else if and (eq .osid "linux") .personal}}{{ onepasswordRead "op://Personal/SSH Key/id_ed25519_primary" }}{{end}}
+{{else if and (eq .osid "linux") .personal}}{{ onepasswordRead "op://Personal/id_ed25519_primary/private key" }}{{end}}
