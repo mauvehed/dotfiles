@@ -49,17 +49,14 @@
 {{   end }}
 {{ end }}
 
-[hooks.read-source-state.pre]
-    command = ".local/share/chezmoi/.chezmoiscripts/.install-password-manager.sh"
-
 encryption = "gpg"
 [gpg]
     recipient = "19AB 789C 3C87 8FB5 4D37  63D3 4DB4 747D 845D 9ECE"
 
 [data]
-    ephemeral = {{ $ephemeral }}
     name = "mauvehed"
     email = "nate@mvh.dev"
+    ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
     hostname = {{ $hostname | quote }}
     personal = {{ $personal }}
