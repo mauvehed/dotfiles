@@ -2,18 +2,18 @@ LICENSE
 README.md
 docs/
 .pre-commit-config.yaml
-{{ if eq .osid "windows" }}
+{{ if eq .chezmoi.os "windows" }}
 *.sh
 Library
 {{ end }}
 
-{{ if eq .osid "linux" }}
+{{ if eq .chezmoi.os "linux" }}
 # {{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 AppData
 Library
 # {{   end }}
 {{ end }}
 
-{{ if eq .osid "darwin" }}
+{{ if eq .chezmoi.os "darwin" }}
 AppData
 {{ end }}
