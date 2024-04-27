@@ -116,8 +116,8 @@
     {{ if eq .hostname "cypher"}}public_ip             # public IP address{{end}}
     # proxy                  # system-wide http/https/ftp proxy
     battery                # internal battery
-    {{ if eq .osid "darwin"}}wifi                   # wifi speed
-    {{ if eq .osid "darwin"}}vpn_ip                 # virtual private network indicator
+    {{ if eq .osid "darwin"}}wifi                   # wifi speed{{ end }}
+    {{ if eq .osid "darwin"}}vpn_ip                 # virtual private network indicator {{ end }}
     # example                # example user-defined segment (see prompt_example function below)
   )
 
