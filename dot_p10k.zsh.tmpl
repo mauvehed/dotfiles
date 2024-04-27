@@ -51,11 +51,11 @@
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     status                  # exit code of the last command
-    command_execution_time  # duration of the last command
-    background_jobs         # presence of background jobs
+    #command_execution_time  # duration of the last command
+    #background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
-    virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
+    #virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
     #anaconda                # conda environment (https://conda.io/)
     #pyenv                   # python environment (https://github.com/pyenv/pyenv)
     #goenv                   # go environment (https://github.com/syndbg/goenv)
@@ -101,14 +101,14 @@
     chezmoi_shell           # chezmoi shell (https://www.chezmoi.io/)
     #vi_mode                 # vi mode (you don't need this if you've enabled prompt_char)
     # vpn_ip                # virtual private network indicator
-    load                    # CPU load
+    {{ if .osid "linux" }}load                    # CPU load{{ end }}
     # disk_usage            # disk usage
-    ram                     # free RAM
+    {{ if .osid "linux"}}ram                     # free RAM{{ end }}
     # swap                  # used swap
     #todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
     #timewarrior             # timewarrior tracking status (https://timewarrior.net/)
     #taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
-    per_directory_history   # Oh My Zsh per-directory-history local/global indicator
+    #per_directory_history   # Oh My Zsh per-directory-history local/global indicator
     # cpu_arch              # CPU architecture
     time                    # current time
     # =========================[ Line #2 ]=========================
