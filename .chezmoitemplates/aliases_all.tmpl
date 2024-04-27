@@ -15,6 +15,7 @@ alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal tim
 {{ if lookPath "eza" }}alias ls="eza --color=always"{{ end }}
 {{ if lookPath "eza" }}alias lsn="eza"{{ end }}
 {{ if lookPath "eza" }}alias llc="eza --color=always -lars created"{{ end }}
+{{ if lookPath "eza" }}alias lt="eza --color=always -la -T"{{ end }}
 {{ if lookPath "shred" }}alias shred="shred -zvu -n 5"{{ end }}
 {{ if lookPath "vim" }}alias vi="vim"{{ end }}
 {{ if lookPath "podman" }}alias docker="podman"{{ end }}
