@@ -2,20 +2,10 @@
 
 {{ template "utils" . }}
 
-{{ if eq .osid "darwin" }}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{ else if eq .osid "linux" }}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{ end }}
-
-{{ if lookPath "brew" }}
-brew update
-{{ else }}
-{{   if eq .osid "darwin" }}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{   else if eq .osid "linux" }}
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-{{   end }}
-{{ end }}
-
+if exist brew; then
+    eval "$(brew shellenv)"
+    success "brew found. running package install."
 {{ template "brew" . }}
+else
+    info "brew command not found in PATH. skipping brew packages."
+fi
