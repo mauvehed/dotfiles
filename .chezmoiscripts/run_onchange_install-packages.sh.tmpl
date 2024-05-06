@@ -6,9 +6,9 @@ if [[ -f "/opt/homebrew/bin/brew" ]]; then
     brew = "/opt/homebrew/bin/brew"
 fi
 {{ else if eq .osid "linux"  }}
-    brew = "/home/linuxbrew/.linuxbrew/bin/brew"
+brew="/home/linuxbrew/.linuxbrew/bin/brew"
 {{ end }}
-if [[ -f $brew ]]; then
+if [[ -f "$brew" ]]; then
     eval "$($brew shellenv)"
     info "Running run_onchange_install-packages.sh..."
 
