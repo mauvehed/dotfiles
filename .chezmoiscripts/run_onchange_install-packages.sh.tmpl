@@ -1,16 +1,24 @@
 #!/bin/bash
 
 {{ template "utils" . }}
-
-if exist brew; then
-    eval "$(brew shellenv)"
+{{ if eq .osid "darwin" }}
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+    brew = "/opt/homebrew/bin/brew"
+fi
+{{ else if eq .osid "linux"  }}
+    brew = "/home/linuxbrew/.linuxbrew/bin/brew"
+{{ end }}
+if [[ -f $brew ]]; then
+    eval "$($brew shellenv)"
     info "Running run_onchange_install-packages.sh..."
+
 {{ template "brew" . }}
+
     if [ $? -eq 0 ]; then
         success "Successfully installed brew packages."
     else
         fail "Some or all brew packages failed to install."
     fi
 else
-    fail "Command 'brew' not found in PATH. Skipping brew packages."
+    fail "Command 'brew' not found in PATH. Skipping installation of brew packages."
 fi
