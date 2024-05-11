@@ -35,13 +35,6 @@ packages:
         - 'zoxide'
         - 'zsh'
         casks:
-        asdf:
-        - 'nodejs'
-        - 'python'
-        - 'golang'
-        - 'ruby'
-        npm:
-        pip:
     personal:
         core:
             taps:
@@ -49,6 +42,7 @@ packages:
             - 'gh'
             - 'gitleaks'
             - 'gnupg'
+            - 'lynis'
             casks:
             npm:
             - opencommit
