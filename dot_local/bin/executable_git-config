@@ -29,8 +29,23 @@ update_git_config() {
     fi
 }
 
-# Update configurations for mauvehed repositories
+# Update configurations for mauvehed@github repositories
 update_git_config "$HOME/gitwork/github/mauvehed" "mauvehed" "nate@mvh.dev"
 
-# Update configurations for attrition-org repositories
+# Update configurations for mauvehed@github repositories
+update_git_config "$HOME/gitwork/gitea/mauvehed" "mauvehed" "nate@mvh.dev"
+
+# Update configurations for attrition-org@github organization repositories
 update_git_config "$HOME/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"
+
+# Update configurations for AustinHackers@github organization repositories
+update_git_config "$HOME/gitwork/github/AustinHackers" "mauvehed" "nate@mvh.dev"
+
+# Update configurations for HackersAssociation@github organization repositories
+update_git_config "$HOME/gitwork/github/AustinHackers" "mauvehed" "nate@mvh.dev"
+
+# Update configurations for AustinHackers@github organization repositories
+update_git_config "$HOME/gitwork/github/AustinHackers" "mauvehed" "nate@mvh.dev"
+
+# Update configurations for ConTechCrew@github organization repositories
+update_git_config "$HOME/gitwork/github/ConTechCrew" "Nate Sanders" "nate.sanders@contechcrew.org"
