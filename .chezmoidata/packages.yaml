@@ -23,7 +23,6 @@ packages:
         - 'mosh'
         - 'mtr'
         - 'ncdu'
-        - 'neofetch'
         - 'nmap'
         - 'pre-commit'
         - 'slides'
@@ -42,11 +41,11 @@ packages:
             - 'gh'
             - 'gitleaks'
             - 'gnupg'
-            - 'lynis'
             casks:
             npm:
             - opencommit
             pip:
+            - poetry
         darwin:
             taps:
             - 'snyk/tap'
