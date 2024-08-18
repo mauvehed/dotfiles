@@ -1,7 +1,7 @@
 
 ############################ Begin .aliases_linuxos ############################
 
-alias clt="/home/linuxbrew/.linuxbrew/bin/clear;echo '===============================================================================';llc /mnt/titan/media/Downloads/TV/|tail -25;echo '===============================================================================';llc /mnt/titan/media/Downloads/Movies/|tail -12;echo '=============================================================================='"
+alias clt='echo "===========================================================================================";\ls --color=always -larth /mnt/titan/media/Downloads/TV/ | tail -30;echo "===========================================================================================";\ls --color=always -larth /mnt/titan/media/Downloads/Movies/ | tail -20;echo "==========================================================================================="'
 alias gpn_start_default="/usr/bin/sudo openvpn --config /etc/openvpn/nate-laptop-two.ovpn 2>&1 > /dev/null"
 alias gpn_start_noroute="/usr/bin/sudo openvpn --config /etc/openvpn/nate-laptop-two.ovpn 2>&1 > /dev/null"
 alias gpn_stop="/usr/bin/sudo /usr/bin/killall openvpn"
