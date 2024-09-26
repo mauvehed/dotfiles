@@ -36,14 +36,9 @@ zstyle :omz:plugins:ssh-agent lazy yes
 eval "$(zoxide init zsh)"
 {{ end }}
 
-echo "... Looking for oh-my-posh in path"
 {{ if lookPath "oh-my-posh" }}
-echo "... oh-my-posh was found in path."
-echo "... Now evaluating if we are running in Apple Terminal.app"
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-  echo "We are running inside Apple Terminal.app"
-  echo "Now executing oh-my-posh init"
-  eval "$(eval "$(oh-my-posh init zsh --config ~/1_shell.omp.json)")"
+  eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/jandedobbeleer.omp.json)"
 fi
 {{ end }}
 
