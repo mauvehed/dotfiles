@@ -25,6 +25,7 @@ packages:
         - 'mtr'
         - 'ncdu'
         - 'nmap'
+        - 'oh-my-posh'
         - 'pre-commit'
         - 'slides'
         - 'tldr'
