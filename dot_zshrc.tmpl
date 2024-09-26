@@ -6,8 +6,13 @@
 #  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 #fi
 
-export PATH=$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.local/bin/update/bin:$HOME/bin:/usr/local/bin:$PATH
-export PATH="$HOME/.local/share/git-fuzzy/bin:$PATH"
+{{ if eq .osid "darwin" }}
+# required for openjdk java to load before system java
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+{{ end }}
+
+export PATH="$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.local/bin/update/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/git-fuzzy/bin:$PATH"
+
 {{ if eq .osid "darwin" }}
 # Add Visual Studio Code (code)
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
