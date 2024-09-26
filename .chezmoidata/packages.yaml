@@ -18,7 +18,6 @@ packages:
         - 'git'
         - 'grep'
         - 'htop'
-        - 'iterm2'
         - 'jq'
         - 'jless'
         - 'mdless'
@@ -109,10 +108,10 @@ packages:
         - '1password/tap'
         brews:
         - 'podman'
+        - 'iterm2'
         casks:
         - '1password-cli'
         - 'podman-desktop'
-        - 'warp'
     linux:
         taps:
         brews:
