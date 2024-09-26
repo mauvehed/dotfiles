@@ -36,6 +36,12 @@ zstyle :omz:plugins:ssh-agent lazy yes
 eval "$(zoxide init zsh)"
 {{ end }}
 
+{{ if lookPath "oh-my-posh" }}
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(eval "$(oh-my-posh init zsh --config ~/1_shell.omp.json)")"
+fi
+{{ end }}
+
 # Recommended by pyenv oh-my-zsh plugin
 # if type pyenv &>/dev/null
 # then

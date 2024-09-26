@@ -3,6 +3,7 @@ packages:
         taps:
         - 'homebrew/bundle'
         - 'homebrew/services'
+        - 'jandedobbeleer/oh-my-posh'
         brews:
         - 'age'
         - 'asdf'
@@ -17,6 +18,7 @@ packages:
         - 'git'
         - 'grep'
         - 'htop'
+        - 'iterm2'
         - 'jq'
         - 'jless'
         - 'mdless'
@@ -34,6 +36,7 @@ packages:
         - 'zoxide'
         - 'zsh'
         casks:
+        - 'font-fira-code-nerd-font'
     personal:
         core:
             taps:
