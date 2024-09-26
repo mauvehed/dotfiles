@@ -89,9 +89,12 @@ packages:
     work:
         core:
             taps:
+            - 'snyk/tap'
             brews:
             - 'gh'
             - 'gitleaks'
+            - 'semgrep'
+            - 'snyk/tap/snyk'
             casks:
             npm:
             pip:
@@ -108,9 +111,9 @@ packages:
         - '1password/tap'
         brews:
         - 'podman'
-        - 'iterm2'
         casks:
         - '1password-cli'
+        - 'iterm2'
         - 'podman-desktop'
     linux:
         taps:
