@@ -3,6 +3,7 @@ packages:
         taps:
         - 'homebrew/bundle'
         - 'homebrew/services'
+        - 'jandedobbeleer/oh-my-posh'
         brews:
         - 'age'
         - 'asdf'
@@ -24,6 +25,7 @@ packages:
         - 'mtr'
         - 'ncdu'
         - 'nmap'
+        - 'oh-my-posh'
         - 'pre-commit'
         - 'slides'
         - 'tldr'
@@ -34,6 +36,7 @@ packages:
         - 'zoxide'
         - 'zsh'
         casks:
+        - 'font-fira-code-nerd-font'
     personal:
         core:
             taps:
@@ -87,9 +90,12 @@ packages:
     work:
         core:
             taps:
+            - 'snyk/tap'
             brews:
             - 'gh'
             - 'gitleaks'
+            - 'semgrep'
+            - 'snyk/tap/snyk'
             casks:
             npm:
             pip:
@@ -108,8 +114,8 @@ packages:
         - 'podman'
         casks:
         - '1password-cli'
+        - 'iterm2'
         - 'podman-desktop'
-        - 'warp'
     linux:
         taps:
         brews:
