@@ -84,7 +84,7 @@
       "segments": [
         {
           "background": "#4c1f5e",
-          "foreground": "#E4F34A",
+          "foreground": "#419cd0",
           "leading_diamond": " \ue0b6",
           "properties": {
             "fetch_version": false
