@@ -1,4 +1,6 @@
-OCO_OPENAI_API_KEY={{if and (eq .osid "darwin") .personal}}{{ onepasswordRead "op://personal/OpenAI API Key/api key" }}{{ end }}
+{{if and (eq .osid "darwin") .personal}}OCO_OPENAI_API_KEY={{ onepasswordRead "op://personal/OpenAI API Key/api key" }}
+{{ else if eq .hostname "darkwing" }}OCO_OPENAI_API_KEY={{ onepasswordRead "op://personal/OpenAI API Key/api key" }}
+{{ else }}OCO_OPENAI_API_KEY={{ end }}
 OCO_OPENAI_MAX_TOKENS=undefined
 OCO_OPENAI_BASE_PATH=undefined
 OCO_DESCRIPTION=true
