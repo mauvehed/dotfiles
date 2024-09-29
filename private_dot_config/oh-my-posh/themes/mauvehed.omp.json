@@ -19,7 +19,7 @@
             "windows": "\uf17a"
           },
           "style": "diamond",
-          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} {{ .HostName }}",
+          "template": "<b> {{ if .WSL }}WSL at {{ end }}{{.Icon}} {{ .HostName }}</b>",
           "type": "os"
         },
         {
@@ -70,7 +70,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "\ue626 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}",
+          "template": "<b>\ue626 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
           "type": "go"
         },
         {
@@ -81,7 +81,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "\ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }}",
+          "template": "<b>\ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }}</b>",
           "type": "node"
         },
         {
@@ -92,18 +92,18 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "\ue791ruby {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}",
+          "template": "<b>\ue791ruby {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
           "type": "ruby"
         },
         {
           "background": "#834e93",
-          "foreground": "#E64747",
+          "foreground": "#e07852",
           "powerline_symbol": "\ue0b4 ",
           "properties": {
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "\ue738java {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}",
+          "template": "<b>\ue738java {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
           "type": "java"
         },
         {
