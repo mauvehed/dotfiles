@@ -21,10 +21,10 @@ After installation or major changes you may need to relogin to 1Password with:
 
 | Name | Description | Required |
 | ---- | ----------- | -------- |
-| Terminal | [Warp](https://warp.dev) | No |
+| Terminal | [iTerm2](https://iterm2.com) | No |
 | Package manager | [homebrew](https://brew.sh/) | Yes |
 | Shell | [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH) | Yes |
-| Zsh theme         | [powerlevel10k](https://github.com/romkatv/powerlevel10k) | Yes |
+| oh-my-posh         | [oh-my-posh](https://ohmyposh.dev) | Yes |
 | Dotfiles manager  | [chezmoi](https://chezmoi.io/) | Yes |
 | Password Manager  | [1password](https://www.1password.com/) | Yes |
 
