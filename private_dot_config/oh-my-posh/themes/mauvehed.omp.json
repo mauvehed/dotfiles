@@ -59,7 +59,7 @@
             "fetch_version": false
           },
           "style": "powerline",
-          "template": "\ue235{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}",
+          "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }}",
           "type": "python"
         },
         {
@@ -70,18 +70,18 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "<b>\ue626 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
+          "template": "<b>\ue626 {{ if .Error }}{{ .Error }}{{ else }}go-{{ .Full }}{{ end }}</b>",
           "type": "go"
         },
         {
           "background": "#834e93",
           "foreground": "#42E66C",
-          "powerline_symbol": "\ue0b4node ",
+          "powerline_symbol": "\ue0b4 ",
           "properties": {
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "<b>\ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }}</b>",
+          "template": "<b>\ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}node-{{ .Full }}</b>",
           "type": "node"
         },
         {
@@ -92,7 +92,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "<b>\ue791ruby {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
+          "template": "<b>\ue791 {{ if .Error }}{{ .Error }}{{ else }}ruby-{{ .Full }}{{ end }}</b>",
           "type": "ruby"
         },
         {
@@ -103,7 +103,7 @@
             "fetch_version": true
           },
           "style": "powerline",
-          "template": "<b>\ue738java {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}</b>",
+          "template": "<b>\ue738 {{ if .Error }}{{ .Error }}{{ else }}java-{{ .Full }}{{ end }}</b>",
           "type": "java"
         },
         {
