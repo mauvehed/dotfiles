@@ -26,6 +26,7 @@ set wildmenu                   " Great command-line completion, use `<Tab>` to m
                                " around and `<CR>` to validate.
 set tabstop=2                  " Set tab character to show as 2 spaces
 set softtabstop=2              " Set tab to input 2 spaces
+set shiftwidth=2              " Set shiftwidth to 2 spaces
 set list                       " Enable visibility of spaces and tab characters"
 set listchars=multispace:\ \ ┊ " Set indentation to show a modified pipe"
 set expandtab                  " Change tabs to spaces"
