@@ -78,6 +78,7 @@ packages:
             casks:
             - 'balenaetcher'
             - 'google-chrome'
+            - 'postman'
             - 'signal'
             - 'stats'
             - 'tailscale'
