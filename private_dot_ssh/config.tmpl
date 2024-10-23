@@ -17,8 +17,12 @@ Host *
   AddKeysToAgent yes
   PreferredAuthentications publickey
   ForwardAgent no
+{{ if .personal }}
   IdentityFile ~/.ssh/id_ed25519_primary
 
-{{ if .personal }}
 {{ onepasswordRead "op://Personal/SSH Config/notesPlain" }}
+{{ else if .work }}
+  IdentityFile ~/.ssh/id_ed25519
+
+{{ onepasswordRead "op://Employee/SSH Config-work/notesPlain" }}
 {{ end }}

@@ -54,11 +54,19 @@ encryption = "gpg"
     recipient = "19AB 789C 3C87 8FB5 4D37  63D3 4DB4 747D 845D 9ECE"
 
 [data]
-    name = "mauvehed"
-    email = "nate@mvh.dev"
     ephemeral = {{ $ephemeral }}
     headless = {{ $headless }}
     hostname = {{ $hostname | quote }}
     personal = {{ $personal }}
     work = {{ $work }}
     osid = {{ $osID | quote }}
+    {{ if .personal }}
+    name = "mauvehed"
+    email = "nate@mvh.dev"
+    {{ else if .work }}
+    name = "Nate Sanders"
+    email = "nate.sanders@bazaarvoice.com"
+    {{ else }}
+    name = {{ .name | quote }}
+    email = {{ .email | quote }}
+    {{ end }}

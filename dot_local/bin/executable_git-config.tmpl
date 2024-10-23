@@ -1,3 +1,5 @@
+# vim: ft=bash:
+#
 #!/bin/bash
 
 # Define colors
@@ -35,6 +37,9 @@ update_git_config "$HOME/gitwork/github/mauvehed" "mauvehed" "nate@mvh.dev"
 # Update configurations for mauvehed@github repositories
 update_git_config "$HOME/gitwork/gitea/mauvehed" "mauvehed" "nate@mvh.dev"
 
+# Update configurations for chezmoi local repository
+update_git_config "$HOME/.local/share/chezmoi" "mauvehed" "nate@mvh.dev"
+
 # Update configurations for attrition-org@github organization repositories
 update_git_config "$HOME/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"
 
@@ -49,3 +54,7 @@ update_git_config "$HOME/gitwork/github/AustinHackers" "mauvehed" "nate@mvh.dev"
 
 # Update configurations for ConTechCrew@github organization repositories
 update_git_config "$HOME/gitwork/github/ConTechCrew" "Nate Sanders" "nate.sanders@contechcrew.org"
+{{ if .work }}
+# Update configurations for work organization repositories
+update_git_config "$HOME/gitwork/github/bvengineering" "{{ .name }}" "{{ .email }}"
+{{end}}
