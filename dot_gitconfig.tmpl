@@ -1,7 +1,7 @@
 [user]
   name = {{ .name }}
   email = {{ .email }}
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP
+  {{if and (eq .osid "darwin") .personal}}signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP{{ end }}
 [color]
   ui = true
 [core]
@@ -17,15 +17,15 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
-[commit]
-  {{ if eq .osid "darwin" }}gpgSign = true{{ else }}gpgSign = false{{ end }}
 [pull]
   rebase = false
-[gpg]
-  format = ssh
-{{ if eq .osid "darwin" }}[gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"{{ end }}
 [tag]
   forceSignAnnotated = false
 [init]
   defaultBranch = main
+[commit]
+  {{if and (eq .osid "darwin") .personal}}gpgSign = true{{ else }}gpgSign = false{{ end }}
+{{if and (eq .osid "darwin") .personal}}[gpg]
+  format = ssh
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"{{ end }}
