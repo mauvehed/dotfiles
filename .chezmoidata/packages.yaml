@@ -33,6 +33,7 @@ packages:
         - 'tree'
         - 'vim'
         - 'wget'
+        - 'yarn'
         - 'zoxide'
         - 'zsh'
         casks:
