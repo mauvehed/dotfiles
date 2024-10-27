@@ -27,7 +27,6 @@ packages:
         - 'nmap'
         - 'oh-my-posh'
         - 'pre-commit'
-        - 'slides'
         - 'tldr'
         - 'tmux'
         - 'tree'
