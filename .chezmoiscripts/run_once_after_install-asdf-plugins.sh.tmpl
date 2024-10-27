@@ -15,6 +15,16 @@ if exist asdf; then
         asdf global nodejs latest
     fi
 
+    # yarn 
+    if asdf list nodejs >/dev/null 2>&1; then
+      if ! asdf list yarn >/dev/null 2>&1; then
+          info "Installing yarn with asdf."
+          asdf plugin-add yarn
+          asdf install yarn latest
+          asdf global yarn latest
+      fi
+    fi
+
     # golang
     if ! asdf list golang >/dev/null 2>&1; then
         info "Installing golang with asdf."
