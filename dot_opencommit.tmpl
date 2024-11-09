@@ -1,12 +1,14 @@
+OCO_AI_PROVIDER=openai
 {{if and (eq .osid "darwin") .personal}}OCO_OPENAI_API_KEY={{ onepasswordRead "op://personal/OpenAI API Key/api key" }}
 {{ else if eq .hostname "darkwing" }}OCO_OPENAI_API_KEY={{ onepasswordRead "op://personal/OpenAI API Key/api key" }}
 {{ else }}OCO_OPENAI_API_KEY={{ end }}
-OCO_AI_PROVIDER=openai
 OCO_OPENAI_MAX_TOKENS=undefined
 OCO_OPENAI_BASE_PATH=undefined
 OCO_DESCRIPTION=true
 OCO_EMOJI=undefined
-OCO_MODEL=gpt-4
+OCO_MODEL=gpt-4o
 OCO_LANGUAGE=en
 OCO_MESSAGE_TEMPLATE_PLACEHOLDER=$msg
 OCO_PROMPT_MODULE=conventional-commit
+OCO_WHY=true
+OCO_GITPUSH=false
