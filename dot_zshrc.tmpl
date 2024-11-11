@@ -95,7 +95,7 @@ plugins=(
 [ -f ~/.aliases ] && source ~/.aliases
 
 # run uptime check to warn if over 60 days
-[ -f ~/.local/bin/check_uptime.sh ] || bash ~/.local/bin/check_uptime.sh
+[ -f ~/.local/bin/check_uptime.sh ] && bash ~/.local/bin/check_uptime.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
