@@ -89,10 +89,13 @@ plugins=(
 )
 
 # call and load oh-my-zsh
-source $ZSH/oh-my-zsh.sh
+[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
 
 # set aliases
-source ~/.aliases
+[ -f ~/.aliases ] && source ~/.aliases
+
+# run uptime check to warn if over 60 days
+[ -f ~/.local/bin/check_uptime.sh ] || bash ~/.local/bin/check_uptime.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
