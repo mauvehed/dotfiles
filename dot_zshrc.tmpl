@@ -121,3 +121,23 @@ fi
 {{ if eq .osid "darwin" }}
 [ -f $XDG_CONFIG_HOME/iterm2/iterm2_shell_integration.zsh ] && . $XDG_CONFIG_HOME/iterm2/iterm2_shell_integration.zsh
 {{ end }}
+
+autoload -Uz add-zsh-hook
+
+autoload -Uz chpwd_functions
+chpwd_functions+=ensure_envrc
+
+ensure_envrc() {
+  if [ -d ".git" ]; then
+    if [ ! -f ".envrc" ]; then
+      echo "use asdf" > .envrc
+      direnv allow
+      echo "Created and allowed .envrc with 'use asdf' in $(pwd)"
+    elif ! grep -q "use asdf" .envrc; then
+      echo "use asdf" >> .envrc
+      direnv allow
+      echo "Updated .envrc with 'use asdf' in $(pwd)"
+    fi
+  fi
+}
+
