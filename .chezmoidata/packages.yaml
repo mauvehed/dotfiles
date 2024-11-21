@@ -4,6 +4,7 @@ packages:
         - 'homebrew/bundle'
         - 'homebrew/services'
         - 'jandedobbeleer/oh-my-posh'
+        - 'turbot/tap/steampipe'
         brews:
         - 'age'
         - 'asdf'
@@ -18,6 +19,7 @@ packages:
         - 'git'
         - 'grep'
         - 'htop'
+        - 'hugo'
         - 'jq'
         - 'jless'
         - 'mdless'
