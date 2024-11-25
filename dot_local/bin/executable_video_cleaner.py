@@ -36,7 +36,7 @@ def prompt_for_bulk_deletion(files_to_delete, test_mode):
         print("No files marked for deletion.")
         logging.info("No files were marked for deletion.")
         return
-    
+
     print("The following files are marked for deletion:")
     for file, duration in files_to_delete:
         hours = int(duration // 3600)
@@ -44,7 +44,7 @@ def prompt_for_bulk_deletion(files_to_delete, test_mode):
         seconds = int(duration % 60)
         print(f" - {file} (Duration: {hours:02}:{minutes:02}:{seconds:02})")
         logging.info(f"File marked for deletion: {file} (Duration: {hours:02}:{minutes:02}:{seconds:02})")
-    
+
     while True:
         user_input = input("Do you want to delete all these files? (y/n): ").strip().lower()
         if user_input in ['y', 'n']:
@@ -66,9 +66,9 @@ def main(folder_path, max_length, test_mode, debug_mode, log_file):
     # Set up logging
     logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     logging.info("Script started.")
-    
+
     files_to_delete = []  # List to keep track of files marked for deletion
-    
+
     # Iterate over all files in the specified folder
     for root, dirs, files in os.walk(folder_path):
         for file in files:
@@ -76,19 +76,19 @@ def main(folder_path, max_length, test_mode, debug_mode, log_file):
             if file.lower().endswith(('.mp4', '.mkv', '.avi', '.mov', '.flv', '.m4v')):
                 video_path = os.path.join(root, file)
                 duration = get_video_duration(video_path)
-                
+
                 if duration is None:
                     logging.warning(f"Skipping {file} due to error retrieving duration.")
                     continue
-                
+
                 # Debug print to show file processing and duration
                 if debug_mode:
                     print(f"Processing file: {file}, Duration: {duration} seconds")
-                
+
                 # If video is shorter than the maximum length, mark for deletion
                 if duration < max_length:
                     files_to_delete.append((video_path, duration))
-    
+
     # Prompt for bulk deletion
     prompt_for_bulk_deletion(files_to_delete, test_mode)
 
@@ -102,8 +102,8 @@ if __name__ == "__main__":
     parser.add_argument("log_file", help="The path to the log file.")
     parser.add_argument("--test", action="store_true", help="Simulate the execution without actually deleting any files.")
     parser.add_argument("--debug", action="store_true", help="Enable debug mode to print processing information.")
-    
+
     args = parser.parse_args()
-    
+
     # Run the main function
     main(args.folder, args.max_length, args.test, args.debug, args.log_file)

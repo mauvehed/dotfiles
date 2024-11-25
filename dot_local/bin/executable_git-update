@@ -6,9 +6,12 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
-# Check if the directory exists
-if [ ! -d ~/gitwork/github ]; then
-    echo -e "${RED}Directory ~/gitwork/github does not exist.${NC}"
+# Base directory
+BASE_DIR=~/gitwork/github
+
+# Check if the base directory exists
+if [ ! -d "$BASE_DIR" ]; then
+    echo -e "${RED}Directory $BASE_DIR does not exist.${NC}"
     exit 1
 fi
 
@@ -23,39 +26,56 @@ check_directory_exists() {
 # Function to pull changes from git
 pull_changes() {
     echo -e "${YELLOW}Pulling changes from git...${NC}"
-    git pull || { echo -e "${RED}Failed to pull changes from git.${NC}"; exit 1; }
+    git pull || { echo -e "${RED}Failed to pull changes from git.${NC}"; return 1; }
+}
+
+# Function to check and switch to main or master branch
+switch_to_main_or_master() {
+    local branch
+    branch=$(git rev-parse --abbrev-ref HEAD)
+
+    if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}Attempting to switch to main or master branch...${NC}"
+    git checkout main 2>/dev/null || git checkout master 2>/dev/null || {
+        echo -e "${RED}Failed to switch to main or master branch.${NC}"
+        return 1
+    }
 }
 
 # Main script
-for directory in ~/gitwork/github/*/*; do
+for directory in "$BASE_DIR"/*/*; do
     if [ -d "$directory" ]; then
-        # Change directory and print the path
-        cd "$directory" || { echo -e "${RED}Failed to change directory to $directory${NC}"; continue; }
-        echo -e "${GREEN}Current directory: $(pwd)${NC}"
+        # Change to the repository directory
+        cd "$directory" || { echo -e "${RED}Failed to change directory to $directory.${NC}"; continue; }
+        echo -e "${GREEN}Processing repository: $(pwd)${NC}"
 
         # Check if upstream branch is set
         if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
             echo -e "${YELLOW}No upstream branch set. Skipping pull.${NC}"
             echo
-            cd ~/gitwork/github/ || { echo -e "${RED}Failed to change directory back to ~/gitwork/github/${NC}"; exit 1; }
             continue
         fi
 
-        # Attempt to switch to main branch
-        git checkout main 2>/dev/null || { 
-            # If main branch doesn't exist, try switching to master
-            git checkout master || { 
-                echo -e "${RED}Failed to switch to the main or master branch.${NC}"; 
-                cd ~/gitwork/github/ || { echo -e "${RED}Failed to change directory back to ~/gitwork/github/${NC}"; exit 1; }
-                continue
-            }
-        }
+        # Attempt to switch to main or master branch
+        if ! switch_to_main_or_master; then
+            echo -e "${YELLOW}Skipping pull for repository: $(pwd)${NC}"
+            echo
+            continue
+        fi
 
         # Pull changes from git
-        pull_changes
+        if ! pull_changes; then
+            echo -e "${YELLOW}Skipping further actions for repository: $(pwd)${NC}"
+            echo
+            continue
+        fi
 
-        # Return to the main directory
-        cd ~/gitwork/github/ || { echo -e "${RED}Failed to change directory back to ~/gitwork/github/${NC}"; exit 1; }
+        echo -e "${GREEN}Successfully updated repository: $(pwd)${NC}"
         echo
     fi
 done
+
+echo -e "${GREEN}Script execution completed.${NC}"
