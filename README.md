@@ -4,7 +4,7 @@ My collection of my dotfiles used across multiple systems and managed by [chezmo
 
 ## Quick Start
 
-```bash
+```sh
   sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply mauvehed
 ```
 
@@ -13,7 +13,7 @@ need the [1Password CLI](https://developer.1password.com/docs/cli/) installed.
 
 After installation or major changes you may need to relogin to 1Password with:
 
-```bash
+```sh
   eval $(op signin)
 ```
 
@@ -31,41 +31,71 @@ After installation or major changes you may need to relogin to 1Password with:
 ## Command Reference
 
 To add new files to chezmoi control:
-> `chezmoi add <file>`
+
+```sh
+chezmoi add <file>
+```
 
 To edit a file under chezmoi control:
-> `chezmoi edit <file>`
+
+```sh
+chezmoi edit <file>
+```
 
 To preview changes before applying:
-> `chezmoi diff`
+
+```sh
+chezmoi diff
+```
 
 To apply changes from `.local/share/chezmoi/` to ~/ use:
-> `chezmoi apply`
+
+```sh
+chezmoi apply
+```
 
 To both `git pull` and `chezmoi apply` use `update`
-> `chezmoi update`
+
+```sh
+chezmoi update
+```
 
 To force a refresh the downloaded archives (from .`chezmoiexternal.toml`), use the --refresh-externals (-R) flag to chezmoi apply:
-> `chezmoi -R apply`
+
+```sh
+chezmoi -R apply
+```
 
 To test chezmoi template files (.tmpl):
-> `chezmoi execute-template < dot_gitconfig.tmpl`
+```sh
+chezmoi execute-template < dot_gitconfig.tmpl
+```
 
 ## Chezmoi and Git
 
 To execute git commands within the chezmoi source director you can append them to the *chezmoi* command
 
 Git pull:
-> `chezmoi git pull`
+
+```sh
+chezmoi git pull
+```
 
 Git push:
-> `chezmoi git push`
+
+```sh
+chezmoi git push
+```
 
 Git status:
-> `chezmoi git status`
+
+```sh
+chezmoi git status
+```
 
 ## Resources
 
+* [Repo Docs/](docs/)
 * [Install](https://www.chezmoi.io/install/)
 * [Quick Start](https://www.chezmoi.io/quick-start/#using-chezmoi-across-multiple-machines)
 * [Setup](https://www.chezmoi.io/user-guide/setup/)
