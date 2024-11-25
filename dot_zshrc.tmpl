@@ -141,3 +141,8 @@ ensure_envrc() {
   fi
 }
 
+try_mosh_host () {
+  local host="$1"
+  /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server "$host" 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/bin/mosh-server "$host" 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/local/bin/mosh-server "$host" 2> /dev/null
+}
+
