@@ -1,3 +1,5 @@
+[![gitleaks](https://github.com/mauvehed/dotfiles/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/mauvehed/dotfiles/actions/workflows/gitleaks.yml)
+
 # dotfiles & config management
 
 My collection of my dotfiles used across multiple systems and managed by [chezmoi](https://www.github.com/twpayne/chezmoi).
