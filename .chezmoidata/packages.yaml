@@ -4,6 +4,7 @@ packages:
         - 'homebrew/bundle'
         - 'homebrew/services'
         - 'jandedobbeleer/oh-my-posh'
+        - 'hashicorp/tap'
         brews:
         - 'age'
         - 'asdf'
@@ -28,6 +29,7 @@ packages:
         - 'nmap'
         - 'oh-my-posh'
         - 'pre-commit'
+        - 'hashicorp/tap/terraform'
         - 'tldr'
         - 'tmux'
         - 'tree'
