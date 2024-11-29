@@ -11,6 +11,7 @@ alias myip="/usr/bin/curl https://yourip.app/raw"
 alias upall="/opt/homebrew/bin/brew update && /opt/homebrew/bin/brew upgrade ; ~/.local/bin/git-config ; ~/.local/bin/git-update ; /opt/homebrew/bin/chezmoi -R update"
 alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal time: %{time_total}\nHTTP status: %{http_code}\n" $1'
 alias oco_up='npm i -g opencommit@latest'
+{{ if lookPath "terraform" }}alias tf="terraform"{{ end }}
 {{ if lookPath "tldr" }}alias man="tldr"{{ end }}
 {{ if lookPath "bat" }}alias cat="bat"{{ end }}
 {{ if lookPath "zoxide" }}alias cd="z"{{ end }}
