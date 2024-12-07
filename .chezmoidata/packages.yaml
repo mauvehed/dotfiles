@@ -22,6 +22,7 @@ packages:
         - 'hugo'
         - 'jq'
         - 'jless'
+        - 'mas'
         - 'mdless'
         - 'mosh'
         - 'mtr'
