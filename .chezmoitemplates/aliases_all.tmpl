@@ -15,10 +15,10 @@ alias oco_up='npm i -g opencommit@latest'
 {{ if lookPath "tldr" }}alias man="tldr"{{ end }}
 {{ if lookPath "bat" }}alias cat="bat"{{ end }}
 {{ if lookPath "zoxide" }}alias cd="z"{{ end }}
-{{ if lookPath "eza" }}alias ls="eza --color=always"{{ end }}
+{{ if lookPath "eza" }}alias ls="eza --color=always  --icons --git-repos"{{ end }}
 {{ if lookPath "eza" }}alias lsn="eza"{{ end }}
-{{ if lookPath "eza" }}alias llc="eza --color=always -lars created"{{ end }}
-{{ if lookPath "eza" }}alias lt="eza --color=always -la -T"{{ end }}
+{{ if lookPath "eza" }}alias llc="eza --color=always --icons --git-repos -lars created"{{ end }}
+{{ if lookPath "eza" }}alias lt="eza --color=always --icons --git-repos -la -T"{{ end }}
 {{ if lookPath "shred" }}alias shred="shred -zvu -n 5"{{ end }}
 {{ if lookPath "vim" }}alias vi="vim"{{ end }}
 {{ if lookPath "podman" }}alias docker="podman"{{ end }}
