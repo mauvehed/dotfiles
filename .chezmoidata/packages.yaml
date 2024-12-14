@@ -15,6 +15,7 @@ packages:
         - 'coreutils'
         - 'direnv'
         - 'eza'
+        - 'fd'
         - 'fzf'
         - 'git'
         - 'git-delta'
