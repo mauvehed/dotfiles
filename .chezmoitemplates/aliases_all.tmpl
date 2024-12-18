@@ -2,6 +2,7 @@
 alias ctop='docker run --rm -ti -l com.centurylinklabs.watchtower.enable=false -v /var/run/docker.sock:/var/run/docker.sock quay.io/vektorlab/ctop:latest'
 alias czup='cz update -R -a && source ~/.aliases && cz update -R -a'
 alias fp='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"'
+alias zf='fzf --preview "bat --color=always {}"'
 alias irpg="/usr/bin/ssh -i ~/.ssh/id_rsa_bperry_shell mvhd@volatileminds.net"
 alias gpgtest="echo 'test' | gpg --clearsign"
 alias llt="\ls -lart --color"
