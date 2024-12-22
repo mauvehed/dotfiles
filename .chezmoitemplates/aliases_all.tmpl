@@ -7,6 +7,7 @@ alias irpg="/usr/bin/ssh -i ~/.ssh/id_rsa_bperry_shell mvhd@volatileminds.net"
 alias gpgtest="echo 'test' | gpg --clearsign"
 alias llt="\ls -lart --color"
 alias find="fd"
+alias di="docker ps -a | fzf --preview 'docker inspect {1}'"
 alias moshb='mosh --server=/usr/bin/mosh-server $*'
 alias moshl='mosh --server=/usr/local/bin/mosh-server $*'
 alias myip="/usr/bin/curl https://yourip.app/raw"
