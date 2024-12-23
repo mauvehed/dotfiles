@@ -24,6 +24,7 @@ packages:
         - 'hugo'
         - 'jq'
         - 'jless'
+        - 'lazygit'
         - 'mas'
         - 'mdless'
         - 'mosh'
