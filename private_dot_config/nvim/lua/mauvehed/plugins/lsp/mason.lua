@@ -45,7 +45,7 @@ return {
 				"snykls",
 				"tailwindcss",
 				"terraformls",
-				"tsserver",
+				"ts_ls",
 				"vtsls",
 				"yamlls",
 			},
