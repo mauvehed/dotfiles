@@ -30,6 +30,7 @@ packages:
         - 'mosh'
         - 'mtr'
         - 'ncdu'
+        - 'neovim'
         - 'nmap'
         - 'oh-my-posh'
         - 'pre-commit'
