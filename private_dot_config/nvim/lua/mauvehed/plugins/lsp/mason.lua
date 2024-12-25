@@ -42,7 +42,7 @@ return {
 				"pyright",
 				"sourcery",
 				"svelte",
-				"snykls",
+				"snyk_ls",
 				"tailwindcss",
 				"terraformls",
 				"ts_ls",
