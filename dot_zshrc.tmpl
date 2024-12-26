@@ -58,6 +58,7 @@ fi
 {{ if .personal }}
 
 export OPENAI_API_KEY={{ onepasswordRead "op://Personal/OpenAI API Key/api key" }}
+export DIGITALOCEAN_ACCESS_TOKEN={{ onepasswordRead "op://Personal/DigitalOcean Personal Access Token/token" }}
 
 # history setup
 HISTFILE=$HOME/.zhistory
@@ -69,8 +70,8 @@ setopt hist_ignore_dups
 setopt hist_verify
 
 # completion using arrow keys (based on history)
-bindkey '^[[A' history-search-backward
-bindkey '^[[B' history-search-forward
+#bindkey '^[[A' history-search-backward
+#bindkey '^[[B' history-search-forward
 {{ else }}
 # Don't track shell history
 unset HISTFILE
