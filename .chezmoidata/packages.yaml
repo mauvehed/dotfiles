@@ -1,133 +1,137 @@
 packages:
+  core:
+    taps:
+      - "homebrew/bundle"
+      - "homebrew/services"
+      - "jandedobbeleer/oh-my-posh"
+      - "hashicorp/tap"
+    brews:
+      - "age"
+      - "asdf"
+      - "bat"
+      - "btop"
+      - "curl"
+      - "chezmoi"
+      - "coreutils"
+      - "direnv"
+      - "eza"
+      - "fd"
+      - "fzf"
+      - "git"
+      - "git-delta"
+      - "grep"
+      - "htop"
+      - "hugo"
+      - "jq"
+      - "jless"
+      - "lazygit"
+      - "mas"
+      - "mdless"
+      - "mosh"
+      - "mtr"
+      - "ncdu"
+      - "neovim"
+      - "nmap"
+      - "oh-my-posh"
+      - "pre-commit"
+      - "hashicorp/tap/terraform"
+      - "tlrc"
+      - "tmux"
+      - "tree"
+      - "turbot/tap/steampipe"
+      - "vim"
+      - "wget"
+      - "yarn"
+      - "zoxide"
+      - "zsh"
+    casks:
+      - "font-fira-code-nerd-font"
+  personal:
     core:
-        taps:
-        - 'homebrew/bundle'
-        - 'homebrew/services'
-        - 'jandedobbeleer/oh-my-posh'
-        - 'hashicorp/tap'
-        brews:
-        - 'age'
-        - 'asdf'
-        - 'bat'
-        - 'btop'
-        - 'curl'
-        - 'chezmoi'
-        - 'coreutils'
-        - 'direnv'
-        - 'eza'
-        - 'fd'
-        - 'fzf'
-        - 'git'
-        - 'git-delta'
-        - 'grep'
-        - 'htop'
-        - 'hugo'
-        - 'jq'
-        - 'jless'
-        - 'lazygit'
-        - 'mas'
-        - 'mdless'
-        - 'mosh'
-        - 'mtr'
-        - 'ncdu'
-        - 'neovim'
-        - 'nmap'
-        - 'oh-my-posh'
-        - 'pre-commit'
-        - 'hashicorp/tap/terraform'
-        - 'tlrc'
-        - 'tmux'
-        - 'tree'
-        - 'turbot/tap/steampipe'
-        - 'vim'
-        - 'wget'
-        - 'yarn'
-        - 'zoxide'
-        - 'zsh'
-        casks:
-        - 'font-fira-code-nerd-font'
-    personal:
-        core:
-            taps:
-            brews:
-            - 'gh'
-            - 'gitleaks'
-            - 'gnupg'
-            - 'vercel-cli'
-            casks:
-            npm:
-            - opencommit
-            pip:
-            - poetry
-        darwin:
-            taps:
-            - 'snyk/tap'
-            - 'teamookla/speedtest'
-            brews:
-            - 'awscli'
-            - 'dockutil'
-            - 'ffmpeg'
-            - 'flyctl'
-            - 'iperf3'
-            - 'netlify-cli'
-            - 'nuclei'
-            - 'openssl@3'
-            - 'pinentry-mac'
-            - 'poetry'
-            - 'readline'
-            - 'ripgrep'
-            - 'rsync'
-            - 'semgrep'
-            - 'snyk/tap/snyk'
-            - 'sqlite'
-            - 'teamookla/speedtest/speedtest'
-            - 'telnet'
-            - 'yt-dlp'
-            - 'xz'
-            - 'zlib'
-            casks:
-            - 'balenaetcher'
-            - 'google-chrome'
-            - 'postman'
-            - 'signal'
-            - 'stats'
-            - 'tailscale'
-            - 'visual-studio-code'
-            - 'vlc'
-        linux:
-            taps:
-            brews:
-            casks:
-    work:
-        core:
-            taps:
-            - 'snyk/tap'
-            brews:
-            - 'gh'
-            - 'gitleaks'
-            - 'semgrep'
-            - 'snyk/tap/snyk'
-            casks:
-            npm:
-            pip:
-        darwin:
-            taps:
-            brews:
-            casks:
-        linux:
-            taps:
-            brews:
-            casks:
+      taps:
+      brews:
+        - "gh"
+        - "gitleaks"
+        - "gnupg"
+        - "vercel-cli"
+      casks:
+      npm:
+        - opencommit
+      pip:
+        - poetry
     darwin:
-        taps:
-        - '1password/tap'
-        brews:
-        - 'podman'
-        casks:
-        - '1password-cli'
-        - 'iterm2'
-        - 'podman-desktop'
+      taps:
+        - "snyk/tap"
+        - "teamookla/speedtest"
+      brews:
+        - "awscli"
+        - "dockutil"
+        - "ffmpeg"
+        - "flyctl"
+        - "iperf3"
+        - "netlify-cli"
+        - "nuclei"
+        - "openssl@3"
+        - "pinentry-mac"
+        - "poetry"
+        - "readline"
+        - "ripgrep"
+        - "rsync"
+        - "semgrep"
+        - "snyk/tap/snyk"
+        - "sqlite"
+        - "teamookla/speedtest/speedtest"
+        - "telnet"
+        - "yt-dlp"
+        - "xz"
+        - "zlib"
+      casks:
+        - "balenaetcher"
+        - "google-chrome"
+        - "postman"
+        - "signal"
+        - "stats"
+        - "tailscale"
+        - "visual-studio-code"
+        - "vlc"
     linux:
-        taps:
-        brews:
-        casks:
+      taps:
+      brews:
+      casks:
+  work:
+    core:
+      taps:
+        - "snyk/tap"
+      brews:
+        - "gh"
+        - "gitleaks"
+        - "semgrep"
+        - "snyk/tap/snyk"
+      casks:
+      npm:
+      pip:
+    darwin:
+      taps:
+      brews:
+      casks:
+    linux:
+      taps:
+      brews:
+      casks:
+  darwin:
+    taps:
+      - "1password/tap"
+    brews:
+      - "alt-tab"
+      - "podman"
+    casks:
+      - "1password-cli"
+      - "iterm2"
+      - "keka"
+      - "podman-desktop"
+      - "stats"
+      - "time-out"
+  linux:
+    taps:
+    brews:
+    casks:
