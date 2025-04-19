@@ -56,7 +56,6 @@ packages:
         - "vercel-cli"
       casks:
       npm:
-        - opencommit
       pip:
         - poetry
     darwin:
