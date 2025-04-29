@@ -13,6 +13,7 @@ packages:
       - "curl"
       - "chezmoi"
       - "coreutils"
+      - "diff-so-fancy"
       - "direnv"
       - "eza"
       - "fd"
