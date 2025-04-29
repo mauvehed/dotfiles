@@ -1,0 +1,65 @@
+[user]
+  name = mauvehed
+  email = nate@mvh.dev
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP
+[color]
+  ui = true
+[core]
+  editor = vim
+  eol = lf
+  autocrlf = input
+  compression = 9
+  whitespace = error
+  preloadIndex = true
+  excludesFile = ~/.config/git/ignore_global
+[push]
+  default = simple
+  autoSetupRemote = true
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+[pull]
+  rebase = true
+[tag]
+  forceSignAnnotated = false
+[init]
+  defaultBranch = main
+[commit]
+  gpgSign = true
+[gpg]
+  format = ssh
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[interactive]
+  #  diffFilter = delta --color-only
+  diffFilter = diff-so-fancy --patch
+  singleKey = true
+[delta]
+  navigate = true
+[merge]
+    conflictStyle = zdiff3
+[url "ssh://git@github.com/mauvehed/"]
+  insteadOf = "mvh:"
+[url "ssh://git@github.com/"]
+  insteadOf = "gh:"
+[status]
+  branch = true
+  showStash = true
+  showUntrackedFiles = all
+[diff]
+  renames = copies
+  interHunkContext = 10
+[pager]
+  diff = diff-so-fancy | $pager
+
+[diff-so-fancy]
+  markEmptyLines = false
+
+[color "diff"]
+  meta = black bold
+  frag = magenta
+  context = white
+  whitespace = yellow reverse
+  old = red
