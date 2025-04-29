@@ -13,8 +13,9 @@
   preloadIndex = true
   excludesFile = ~/.config/git/ignore_global
 [push]
-  default = simple
+  default = current
   autoSetupRemote = true
+  followTags = true
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
@@ -22,8 +23,21 @@
   required = true
 [pull]
   rebase = true
+  default = current
+[rebase]
+  autoStash = true
+  missingCommitsCheck = warn
 [tag]
   forceSignAnnotated = false
+  sort = -taggerdate
+[branch]
+  sort = -committerdate
+[color "branch"]
+  current = magenta
+  local = default
+  remote = yellow
+  upstream = green
+  plain = blue
 [init]
   defaultBranch = main
 [commit]
@@ -40,6 +54,14 @@
   navigate = true
 [merge]
     conflictStyle = zdiff3
+[log]
+  abbrevCommit = true
+  graphColor = blue,yellow,cyan,magenta,green,red
+[color "decorate"]
+  branch = blue
+  remoteBranch = magenta
+  tag = yellow
+  head = red
 [url "ssh://git@github.com/mauvehed/"]
   insteadOf = "mvh:"
 [url "ssh://git@github.com/"]
@@ -53,10 +75,8 @@
   interHunkContext = 10
 [pager]
   diff = diff-so-fancy | $pager
-
 [diff-so-fancy]
   markEmptyLines = false
-
 [color "diff"]
   meta = black bold
   frag = magenta
