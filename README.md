@@ -4,31 +4,44 @@
 
 My collection of my dotfiles used across multiple systems and managed by [chezmoi](https://www.github.com/twpayne/chezmoi).
 
+## Core Prerequisite
+
+To get started, you primarily need a shell environment with `curl` or `wget` to download and execute the `chezmoi` installation script.
+
 ## Quick Start
+
+The following command will download and install `chezmoi` (if not already present), initialize it with this dotfiles repository, and apply the configuration. This process will also install and configure other necessary tools such as Homebrew, Zsh, oh-my-zsh, oh-my-posh, and the 1Password CLI.
 
 ```sh
   sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply mauvehed
 ```
 
-Personal secrets are stored in [1Password](https://1password.com) and you'll
-need the [1Password CLI](https://developer.1password.com/docs/cli/) installed.
+### 1Password Integration
 
-After installation or major changes you may need to relogin to 1Password with:
+Personal secrets are stored in [1Password](https://1password.com). The `chezmoi` setup will install the [1Password CLI](https://developer.1password.com/docs/cli/).
 
-```sh
-  eval $(op signin)
-```
+1.  **After the initial `chezmoi apply` completes**, you must sign in to the 1Password CLI:
+    ```sh
+    eval $(op signin)
+    ```
+2.  **Re-apply `chezmoi` (if needed)**: If the initial `chezmoi apply` could not fully provision all configurations due to 1Password not being authenticated, run the apply command again after signing in:
+    ```sh
+    chezmoi apply
+    ```
 
-## Tools Used
+## Tools Managed by These Dotfiles
 
-| Name | Description | Required |
-| ---- | ----------- | -------- |
-| Terminal | [iTerm2](https://iterm2.com) | No |
-| Package manager | [homebrew](https://brew.sh/) | Yes |
-| Shell | [oh-my-zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH) | Yes |
-| oh-my-posh         | [oh-my-posh](https://ohmyposh.dev) | Yes |
-| Dotfiles manager  | [chezmoi](https://chezmoi.io/) | Yes |
-| Password Manager  | [1password](https://www.1password.com/) | Yes |
+These dotfiles, through `chezmoi`, will install and manage the following tools and configurations on your system:
+
+| Name                | Description                                       | Managed |
+| ------------------- | ------------------------------------------------- | -------- |
+| Terminal            | [iTerm2](https://iterm2.com) (macOS)              | Optional |
+| Package manager     | [Homebrew](https://brew.sh/)                      | Yes      |
+| Shell               | [Zsh](https://www.zsh.org/)                       | Yes      |
+| Shell Framework     | [oh-my-zsh](https://ohmyzsh.org/)                 | Yes      |
+| Shell Prompt Customizer | [oh-my-posh](https://ohmyposh.dev)              | Yes      |
+| Dotfiles manager    | [chezmoi](https://chezmoi.io/)                    | Yes      |
+| Password Manager CLI| [1Password CLI](https://www.1password.com/)       | Yes      |
 
 ## Command Reference
 

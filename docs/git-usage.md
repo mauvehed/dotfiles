@@ -1,185 +1,259 @@
-# Git Usage
+# Git Usage and Best Practices
 
-## Table of contents
+This document outlines Git configuration, best practices for commit signing with GPG and 1Password, and useful Git commands relevant to this dotfiles setup.
 
-- [Git Usage](#git-usage)
-  - [Table of contents](#table-of-contents)
-  - [Configuration](#configuration)
-  - [Signing commits](#signing-commits)
-    - [Troubleshooting](#troubleshooting)
-  - [Additional settings](#additional-settings)
-  - [Useful commands](#useful-commands)
+## Table of Contents
 
-## Configuration
+- [Git Usage and Best Practices](#git-usage-and-best-practices)
+  - [Table of Contents](#table-of-contents)
+  - [Core Git Configuration](#core-git-configuration)
+  - [Commit Signing with GPG and 1Password](#commit-signing-with-gpg-and-1password)
+    - [1. Generating or Importing Your GPG Key](#1-generating-or-importing-your-gpg-key)
+    - [2. Adding Your GPG Key ID to 1Password](#2-adding-your-gpg-key-id-to-1password)
+    - [3. Configuring Git to Use the GPG Key (via `chezmoi` and 1Password)](#3-configuring-git-to-use-the-gpg-key-via-chezmoi-and-1password)
+    - [4. Adding GPG Public Key to GitHub](#4-adding-gpg-public-key-to-github)
+    - [5. GPG Agent Configuration](#5-gpg-agent-configuration)
+    - [6. Troubleshooting GPG Signing](#6-troubleshooting-gpg-signing)
+  - [GitHub CLI Authentication (`gh auth login`)](#github-cli-authentication-gh-auth-login)
+  - [Common Git Workflows and Useful Commands](#common-git-workflows-and-useful-commands)
+    - [Basic Workflow](#basic-workflow)
+    - [Branching](#branching)
+    - [Stashing Changes](#stashing-changes)
+    - [Viewing History](#viewing-history)
+    - [Squashing Commits](#squashing-commits)
+    - [Tags](#tags)
+  - [Resources](#resources)
 
-<!-- markdownlint-disable-next-line no-inline-html -->
-The commands below will configure your Git command-line client globally. Please, update your username (<span style="color:red">Your Name</span>) and email address (<span style="color:red">youremail@domain</span>) in the code snippet below prior to executing it.
+## Core Git Configuration
 
-This configuration is to support trunk-based development and git linear history.
+Key Git settings are managed by `chezmoi` via the `dot_gitconfig.tmpl` template file, which generates `~/.gitconfig`.
+This configuration generally promotes trunk-based development and a linear Git history.
 
-```shell
-git config user.name "Your Name" # Use your full name here
-git config user.email "youremail@domain" # Use your email address here
-git config branch.autosetupmerge false
-git config branch.autosetuprebase always
-git config commit.gpgsign true
-git config core.autocrlf input
-git config core.filemode true
-git config core.hidedotfiles false
-git config core.ignorecase false
-git config credential.helper cache
-git config pull.rebase true
-git config push.default current
-git config push.followTags true
-git config rebase.autoStash true
-git config remote.origin.prune true
+Common global settings include:
+
+```ini
+# Example from dot_gitconfig.tmpl (values are templated)
+[user]
+  name = {{ .name | quote }}
+  email = {{ .email | quote }}
+  signingkey = {{ (onepasswordRead "op://Personal/Git GPG Key/key_id").stdout | trim | quote }} # Fetched from 1Password
+[commit]
+  gpgsign = true       # Sign all commits by default
+[pull]
+  rebase = true        # Prefer rebase over merge on pull
+[rebase]
+  autoStash = true     # Automatically stash changes before rebase
+[push]
+  default = current    # Push the current branch to a branch of the same name
+  followTags = true    # Push tags that point to commits being pushed
+[branch]
+  autosetupmerge = false # Do not automatically set up merge configurations
+  autosetuprebase = always # Always rebase when pulling on new branches
+[core]
+  autocrlf = input     # Handle line endings correctly
+  # ... other settings ...
+[remote "origin"]
+  prune = true         # Remove remote-tracking branches that no longer exist on the remote
 ```
 
-This is already set in the [`dot_gitconfig.tmpl`](https://github.com/make-ops-tools/dotfiles/blob/main/dot_gitconfig.tmpl) file, that is used as a template to create `~/.gitconfig`.
+*   The specific template is located at: `{{ .chezmoi.sourceDir }}/dot_gitconfig.tmpl`.
+*   Refer to the [Git Reference documentation](https://git-scm.com/docs) for details on these settings.
 
-More information on the git settings can be found in the [Git Reference documentation](https://git-scm.com/docs).
+## Commit Signing with GPG and 1Password
 
-## Signing commits
+Signing Git commits cryptographically verifies the committer's identity. This setup uses GPG for signing, with the GPG key ID managed via 1Password.
 
-Signing Git commits is a good practice and ensures the correct web of trust has been established for the distributed version control management.
+### 1. Generating or Importing Your GPG Key
 
-<!-- markdownlint-disable-next-line no-inline-html -->
-If you do not have it already generate a new pair of GPG keys. Please, change the passphrase (<span style="color:red">pleaseChooseYourKeyPassphrase</span>) below and save it in your password manager.
+If you don't have a GPG key, generate one:
 
-```shell
-USER_NAME="Your Name"
-USER_EMAIL="your.name@email"
-file=$(echo $USER_EMAIL | sed "s/[^[:alpha:]]/-/g")
-
-mkdir -p "$HOME/.gnupg"
-chmod 0700 "$HOME/.gnupg"
-cd "$HOME/.gnupg"
-cat > "$file.gpg-key.script" <<EOF
-  %echo Generating a GPG key
-  Key-Type: ECDSA
-  Key-Curve: nistp256
-  Subkey-Type: ECDH
-  Subkey-Curve: nistp256
-  Name-Real: $USER_NAME
-  Name-Email: $USER_EMAIL
-  Expire-Date: 0
-  Passphrase: pleaseChooseYourKeyPassphrase
-  %commit
-  %echo done
-EOF
-gpg --batch --generate-key "$file.gpg-key.script"
-rm "$file.gpg-key.script"
-# or do it manually by running `gpg --full-gen-key`
+```sh
+gpg --full-gen-key
 ```
+Follow the prompts. An `ECDSA` key with `nistp256` curve is a good modern choice. Ensure you use a strong passphrase and store it securely (e.g., in 1Password).
 
-Make note of the ID and save the keys.
+If you have an existing GPG key, ensure it's in your GPG keyring.
 
-```shell
-gpg --list-secret-keys --keyid-format LONG $USER_EMAIL
+### 2. Adding Your GPG Key ID to 1Password
+
+Once you have a GPG key, get its Key ID:
+
+```sh
+gpg --list-secret-keys --keyid-format LONG "Your Name" # Or your email
 ```
-
-You should see a similar output to this
-
-```shell
-sec   nistp256/AAAAAAAAAAAAAAAA 2023-01-01 [SCA]
+Output will look like:
+```
+sec   nistp256/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX YYYY-MM-DD [SCA]
       XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-uid                 [ultimate] Your Name <your.name@email>
-ssb   nistp256/BBBBBBBBBBBBBBBB 2023-01-01 [E]
+uid                 [ultimate] Your Name <your.email@example.com>
+ssb   nistp256/YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY YYYY-MM-DD [E]
+```
+The long Key ID is `XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` (the 40-character string).
+
+Store this Key ID in 1Password. For example, create a "Secure Note" or "Login" item named "Git GPG Key" and add a field/label (e.g., `key_id`) with your GPG Key ID as the value.
+
+See `docs/1password-usage.md` for more on storing items in 1Password.
+
+### 3. Configuring Git to Use the GPG Key (via `chezmoi` and 1Password)
+
+As shown in the "Core Git Configuration" section, `dot_gitconfig.tmpl` is set up to fetch the `user.signingkey` from 1Password:
+
+```ini
+[user]
+  signingkey = {{ (onepasswordRead "op://Personal/Git GPG Key/key_id").stdout | trim | quote }}
+```
+Ensure the 1Password item path (`op://Personal/Git GPG Key/key_id`) in your `dot_gitconfig.tmpl` matches where you stored the key ID in 1Password.
+`chezmoi apply` will populate your `~/.gitconfig` with this signing key.
+
+### 4. Adding GPG Public Key to GitHub
+
+To have GitHub show your commits as "Verified":
+
+1.  Export your GPG public key:
+    ```sh
+    gpg --armor --export XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX # Use your Key ID
+    ```
+2.  Copy the entire output (starting with `-----BEGIN PGP PUBLIC KEY BLOCK-----`).
+3.  Go to [GitHub GPG keys settings](https://github.com/settings/keys) and add the new GPG key.
+
+### 5. GPG Agent Configuration
+
+To avoid entering your GPG passphrase for every commit, configure the `gpg-agent` to cache it. `chezmoi` manages `~/.gnupg/gpg-agent.conf`:
+
+```
+# Example content for gpg-agent.conf.tmpl
+# Managed by chezmoi
+
+pinentry-program {{ .pinentryProgram | quote }} # Path to pinentry, templated by chezmoi
+default-cache-ttl 10800 # Cache passphrase for 3 hours
+max-cache-ttl 10800     # Max cache time
+```
+`chezmoi` templates can determine the correct `pinentry-program` path based on your OS.
+After changes, you might need to restart the agent: `gpgconf --kill gpg-agent`.
+
+### 6. Troubleshooting GPG Signing
+
+*   **Error: `gpg failed to sign the data` or `Inappropriate ioctl for device`**:
+    Ensure `export GPG_TTY=$(tty)` is in your shell configuration (e.g., `~/.exports` or `~/.zshrc`, managed by `chezmoi`). This allows GPG to prompt for a passphrase in the current terminal.
+    ```sh
+    # Ensure this line is in a chezmoi-managed shell startup file:
+    # export GPG_TTY=$(tty)
+    ```
+    Restart your shell or source the updated file.
+*   **No Pinentry Program Found**: Ensure `pinentry` is installed (e.g., `brew install pinentry-mac` on macOS) and `gpg-agent.conf` points to the correct program.
+*   **Secret Key Not Available**: Verify the key ID in `~/.gitconfig` matches a private key in your `gpg --list-secret-keys` output.
+
+## GitHub CLI Authentication (`gh auth login`)
+
+While Git uses SSH or HTTPS (often with a credential helper) for repository access, the GitHub CLI (`gh`) requires its own authentication.
+
+```sh
+gh auth login
+```
+Follow the prompts. Authenticating with a web browser (HTTPS) is often simplest.
+Refer to `docs/github-usage.md` for more on using `gh`.
+
+## Common Git Workflows and Useful Commands
+
+### Basic Workflow
+
+```sh
+git pull             # Fetch and integrate changes from remote
+git add .            # Stage all changes in the current directory
+# Or git add <file1> <file2> ... to stage specific files
+git commit -S -m "Your descriptive commit message" # Create a signed commit
+git push             # Push changes to the remote repository
 ```
 
-Export your keys.
+### Branching
 
-```shell
-ID=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-gpg --armor --export $ID > $file.gpg-key.pub
-gpg --armor --export-secret-keys $ID > $file.gpg-key
+*   Create a new branch and switch to it:
+    ```sh
+    git checkout -b new-feature-branch
+    ```
+*   Switch to an existing branch:
+    ```sh
+    git checkout main
+    ```
+*   Delete a local branch (after merging):
+    ```sh
+    git branch -d feature-branch # Safe delete (only if merged)
+    git branch -D feature-branch # Force delete
+    ```
+*   Push a new local branch to remote and set up tracking:
+    ```sh
+    git push -u origin new-feature-branch
+    ```
+
+### Stashing Changes
+
+Temporarily save uncommitted changes:
+
+```sh
+git stash push -m "WIP: some changes for later"
+git stash list
+git stash apply stash@{0} # Apply a specific stash
+git stash pop           # Apply the latest stash and remove it from the list
+git stash drop stash@{0}  # Remove a specific stash
 ```
 
-Import already existing private key.
+### Viewing History
 
-```shell
-gpg --import $file.gpg-key
+*   Compact log view:
+    ```sh
+    git log --oneline --graph --decorate --all
+    ```
+    (Consider creating a Git alias like `git la` for this.)
+*   View changes for a specific commit:
+    ```sh
+    git show <commit_hash>
+    ```
+*   View changes for a specific file:
+    ```sh
+    git log -p -- <file_path>
+    ```
+
+### Squashing Commits
+
+Combine multiple commits into a single one, often done before merging a feature branch.
+
+*   Interactively rebase onto `main` (or your target branch), squashing commits from your current feature branch:
+    ```sh
+    # Assuming you are on your feature branch that branched off main
+    git rebase -i main
+    ```
+    In the interactive editor, change `pick` to `s` (squash) or `f` (fixup) for commits you want to merge into the preceding one. Edit commit messages as needed.
+*   Force push (with lease) if you've rewritten history on a shared branch (use with caution):
+    ```sh
+    git push --force-with-lease
+    ```
+
+Alternatively, the example from the previous version for squashing all commits on a branch into one based on `main`:
+```sh
+# git checkout your-feature-branch
+# git reset $(git merge-base main $(git branch --show-current))
+# git add .
+# git commit -S -m "New single commit message for the feature"
+# git push --force-with-lease origin your-feature-branch
 ```
 
-Remove keys from the GPG agent if no longer needed.
+### Tags
 
-```shell
-gpg --delete-secret-keys $ID
-gpg --delete-keys $ID
+Create lightweight or annotated tags for releases:
+
+```sh
+git tag v1.0.0                                # Lightweight tag
+git tag -a v1.0.1 -m "Version 1.0.1 release"  # Annotated tag (signed if gpgsign=true)
+git push origin v1.0.1                        # Push a specific tag
+git push --tags                               # Push all tags
 ```
 
-Configure Git to use the new key.
+## Resources
 
-```shell
-git config user.signingkey $ID
-```
+*   **Pro Git Book**: [https://git-scm.com/book/en/v2](https://git-scm.com/book/en/v2) (Excellent, comprehensive guide)
+*   **Git Reference Documentation**: [https://git-scm.com/docs](https://git-scm.com/docs)
+*   **GitHub GPG Signing Documentation**: [https://docs.github.com/en/authentication/managing-commit-signature-verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+*   **1Password Documentation**: See `docs/1password-usage.md`
+*   **GitHub CLI Documentation**: See `docs/github-usage.md`
 
-Upload the public key to your GitHub profile into the [GPG keys](https://github.com/settings/keys) section. After doing so, please make sure your email address appears as verified against the commits pushed to the remote.
-
-```shell
-cat $file.gpg-key.pub
-```
-
-### Troubleshooting
-
-If you receive the error message "error: gpg failed to sign the data", make sure you added `export GPG_TTY=$TTY` to your `~/.zshrc` or other file that is sourced by it, like `~/.exports` and restarted your terminal.
-
-```shell
-sed -i '/^export GPG_TTY/d' ~/.exports
-echo "export GPG_TTY=\$TTY" >> ~/.exports
-```
-
-## Additional settings
-
-Configure caching git commit signature passphrase for 3 hours
-
-```shell
-source ~/.zshrc
-mkdir -p ~/.gnupg
-sed -i '/^pinentry-program/d' ~/.gnupg/gpg-agent.conf 2>/dev/null ||:
-echo "pinentry-program $(whereis -q pinentry)" >> ~/.gnupg/gpg-agent.conf
-sed -i '/^default-cache-ttl/d' ~/.gnupg/gpg-agent.conf
-echo "default-cache-ttl 10800" >> ~/.gnupg/gpg-agent.conf
-sed -i '/^max-cache-ttl/d' ~/.gnupg/gpg-agent.conf
-echo "max-cache-ttl 10800" >> ~/.gnupg/gpg-agent.conf
-gpgconf --kill gpg-agent
-```
-
-Please, see the [`assets/03-install-developer-tools.macos.sh`](https://github.com/make-ops-tools/dotfiles/blob/main/assets/03-install-developer-tools.macos.sh) file, as this section is part of the automated configuration.
-
-Authenticate to GitHub and set up your authorisation token
-
-```shell
-$ gh auth login
-? What account do you want to log into? GitHub.com
-? What is your preferred protocol for Git operations? HTTPS
-? Authenticate Git with your GitHub credentials? No
-? How would you like to authenticate GitHub CLI? Paste an authentication token
-Tip: you can generate a Personal Access Token here https://github.com/settings/tokens
-The minimum required scopes are 'repo', 'read:org'.
-? Paste your authentication token: github_pat_**********************************************************************************
-- gh config set -h github.com git_protocol https
-✓ Configured git protocol
-✓ Logged in as your-github-handle
-```
-
-## Useful commands
-
-Add your changes, create a signed commit, update from and push to remote
-
-```shell
-git add .
-git commit -S -m "Create a signed commit"
-git pull
-git push
-```
-
-Squash all commits on branch as one
-
-```shell
-git checkout your-branch-name
-git reset $(git merge-base main $(git branch --show-current))
-git add .
-git commit -S -m "Create just one commit instead"
-git push --force-with-lease
-```
+This guide covers key Git practices for this dotfiles setup. Consistent use of signed commits and a clean history are encouraged.
