@@ -35,7 +35,7 @@ packages:
       - "nmap"
       - "oh-my-posh"
       - "pre-commit"
-      - "hashicorp/tap/terraform"
+      - "tfenv"
       - "tlrc"
       - "tmux"
       - "tree"
