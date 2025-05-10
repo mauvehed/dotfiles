@@ -30,6 +30,8 @@
 {{ if not $ephemeral }}
 {{   if eq $hostname "cypher" }}
 {{     $personal = true }}
+{{   else if eq $hostname "airblade" }}
+{{     $personal = true }}
 {{   else if eq $hostname "computah" }}
 {{     $personal = true }}
 {{   else if eq $hostname "darkwing" }}

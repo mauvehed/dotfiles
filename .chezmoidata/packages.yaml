@@ -1,8 +1,7 @@
 packages:
   core:
     taps:
-      - "homebrew/bundle"
-      - "homebrew/services"
+      - "turbot/tap"
       - "jandedobbeleer/oh-my-posh"
       - "hashicorp/tap"
     brews:
@@ -20,6 +19,7 @@ packages:
       - "fzf"
       - "git"
       - "git-delta"
+      - "git-lfs"
       - "grep"
       - "htop"
       - "hugo"
@@ -38,7 +38,6 @@ packages:
       - "tfenv"
       - "tlrc"
       - "tmux"
-      - "tree"
       - "turbot/tap/steampipe"
       - "vim"
       - "wget"
@@ -122,7 +121,6 @@ packages:
     taps:
       - "1password/tap"
     brews:
-      - "alt-tab"
       - "podman"
     casks:
       - "1password-cli"
@@ -130,7 +128,7 @@ packages:
       - "keka"
       - "podman-desktop"
       - "stats"
-      - "time-out"
+      - "alt-tab"
   linux:
     taps:
     brews:
