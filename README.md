@@ -15,6 +15,21 @@ The following command will download and install `chezmoi` (if not already presen
 ```sh
   sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply mauvehed
 ```
+### Edit config for machine type
+
+After the first run of the install script, we'll need to manually edit the chezmoi config in order to set the machine type. This will enable to full package installation.
+
+```sh
+  chezmoi edit-config
+```
+
+Set `personal = true` or `work = true` depending on the needs. 
+
+Once this is done, re-run chezmoi to force the rest of the install.
+
+```sh
+  chezmoi --force apply
+```
 
 ### 1Password Integration
 
