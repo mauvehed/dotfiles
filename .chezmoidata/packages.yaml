@@ -42,6 +42,7 @@ packages:
       - "vim"
       - "wget"
       - "yarn"
+      - "uv"
       - "zoxide"
       - "zsh"
     casks:
