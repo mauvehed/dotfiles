@@ -74,7 +74,7 @@ setopt hist_verify
 #bindkey '^[[B' history-search-forward
 {{ else }}
 # Don't track shell history
-unset HISTFILE
+#unset HISTFILE
 {{ end }}
 
 # Recommended by pyenv oh-my-zsh plugin
@@ -112,6 +112,9 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+# Update your ~/.zshrc configuration before sourcing oh-my-zsh:
+path+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+autoload -U compinit && compinit
 # call and load oh-my-zsh
 [ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
 
@@ -127,10 +130,11 @@ plugins=(
 # execute fzf fuzzy stuff
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+#if [[ -n $fg && -n $bg && -n $purple && -n $bg_highlight && -n $blue && -n $cyan ]]; then
+#  export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+#fi
 
 # -- Use fd instead of fzf --
-
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
@@ -188,19 +192,19 @@ autoload -Uz add-zsh-hook
 autoload -Uz chpwd_functions
 chpwd_functions+=ensure_envrc
 
-ensure_envrc() {
-  if [ -d ".git" ]; then
-    if [ ! -f ".envrc" ]; then
-      echo "use asdf" > .envrc
-      direnv allow
-      echo "Created and allowed .envrc with 'use asdf' in $(pwd)"
-    elif ! grep -q "use asdf" .envrc; then
-      echo "use asdf" >> .envrc
-      direnv allow
-      echo "Updated .envrc with 'use asdf' in $(pwd)"
-    fi
-  fi
-}
+#ensure_envrc() {
+#  if [ -d ".git" ]; then
+#    if [ ! -f ".envrc" ]; then
+#      echo "use asdf" > .envrc
+#      direnv allow
+#      echo "Created and allowed .envrc with 'use asdf' in $(pwd)"
+#    elif ! grep -q "use asdf" .envrc; then
+#      echo "use asdf" >> .envrc
+#      direnv allow
+#      echo "Updated .envrc with 'use asdf' in $(pwd)"
+#    fi
+#  fi
+#}
 
 try_mosh_host () {
   local host="$1"
