@@ -74,7 +74,7 @@ setopt hist_verify
 #bindkey '^[[B' history-search-forward
 {{ else }}
 # Don't track shell history
-#unset HISTFILE
+unset HISTFILE
 {{ end }}
 
 # Recommended by pyenv oh-my-zsh plugin
@@ -189,17 +189,6 @@ fi
 
 autoload -Uz add-zsh-hook
 
-# Activate Python venv when entering a directory containing a ".venv" subdirectory
-activate_venv_on_cd() {
-    local venv_dir=".venv"
-    if [[ -d "$PWD/$venv_dir" ]]; then
-        source "$PWD/$venv_dir/bin/activate"
-    fi
-}
-
-autoload -U add-zsh-hook
-add-zsh-hook chpwd activate_venv_on_cd
-
 #autoload -Uz chpwd_functions
 #chpwd_functions+=ensure_envrc
 
@@ -229,3 +218,19 @@ export GREP_COLORS='mt=1;37;41'
 
 # set bat theme
 export BAT_THEME=Dracula
+
+activate_venv_on_cd() {
+    echo "testing hook"
+}
+add-zsh-hook chpwd activate_venv_on_cd
+
+# Activate Python venv when entering a directory containing a ".venv" subdirectory
+activate_venv_on_cd() {
+    local venv_dir=".venv"
+    if [[ -d "$PWD/$venv_dir" ]]; then
+        source "$PWD/$venv_dir/bin/activate"
+    fi
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook chpwd activate_venv_on_cd
