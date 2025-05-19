@@ -189,8 +189,19 @@ fi
 
 autoload -Uz add-zsh-hook
 
-autoload -Uz chpwd_functions
-chpwd_functions+=ensure_envrc
+# Activate Python venv when entering a directory containing a ".venv" subdirectory
+activate_venv_on_cd() {
+    local venv_dir=".venv"
+    if [[ -d "$PWD/$venv_dir" ]]; then
+        source "$PWD/$venv_dir/bin/activate"
+    fi
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook chpwd activate_venv_on_cd
+
+#autoload -Uz chpwd_functions
+#chpwd_functions+=ensure_envrc
 
 #ensure_envrc() {
 #  if [ -d ".git" ]; then
