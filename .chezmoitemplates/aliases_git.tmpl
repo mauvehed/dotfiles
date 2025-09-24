@@ -19,5 +19,6 @@ alias gsi="git status --ignored"
 alias gtree="git log --graph --pretty=oneline --abbrev-commit"
 alias gup="git checkout main && git fetch --all && git reset --hard upstream/main"
 alias gf="git-fuzzy"
+alias gpa='!git pull && git submodule update --init --recursive --remote'
 {{ if lookPath "oco" }}alias gc="oco"{{ else }}alias gc="git commit -v"
 {{ end }}
