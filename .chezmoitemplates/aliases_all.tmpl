@@ -20,7 +20,7 @@ alias grep="grep -d skip --color=always"
 {{ if lookPath "zoxide" }}alias cd="z"{{ end }}
 {{ if lookPath "eza" }}alias ls="eza -g --color=always --icons --git-repos"{{ end }}
 {{ if lookPath "eza" }}alias lsn="eza -g"{{ end }}
-{{ if lookPath "eza" }}alias llc="eza -g --color=always --icons --git-repos -lars created"{{ end }}
+{{ if lookPath "eza" }}alias llc='eza -lag --sort=modified --color=always --icons --git-repos'{{ end }}
 {{ if lookPath "eza" }}alias lt="eza -g --color=always --icons --git-repos -la -T"{{ end }}
 {{ if lookPath "shred" }}alias shred="shred -zvu -n 5"{{ end }}
 {{ if lookPath "vim" }}alias vi="vim"{{ end }}
