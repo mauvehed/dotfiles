@@ -48,8 +48,14 @@ eval "$(zoxide init zsh)"
 {{ end }}
 
 {{ if lookPath "oh-my-posh" }}
-if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-#  eval "$(oh-my-posh init zsh --config $(brew --prefix oh-my-posh)/themes/1_shell.omp.json)"
+if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+  # Skip Oh My Posh entirely for Apple Terminal
+  :
+elif [ "$TERM_PROGRAM" = "vscode" ]; then
+  # Load minimal config for VS Code
+  eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/vscode-minimal.omp.json)"
+else
+  # Load your full theme for everything else
   eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/mauvehed.omp.json)"
 fi
 {{ end }}
