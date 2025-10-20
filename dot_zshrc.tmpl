@@ -238,5 +238,10 @@ activate_venv_on_cd() {
     fi
 }
 
+
+if [ "$TERM_PROGRAM" = "vscode" ]; then
+  unalias cd
+fi
+
 autoload -U add-zsh-hook
 add-zsh-hook chpwd activate_venv_on_cd
