@@ -82,5 +82,5 @@
   insteadOf = "gh:"
 [user]
   name = mauvehed
-  email = nate@mvh.dev
+  email = mh@mvh.dev
   signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINdIyOHKVqoLBKCK3n0puLSyRja14+v3JmIeB/e2wOrP
