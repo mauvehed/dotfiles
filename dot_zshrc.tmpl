@@ -8,6 +8,17 @@
 #  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 #fi
 
+# Initialize Homebrew for all interactive shells
+{{ if eq .osid "darwin" }}
+if [ -f "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ else if eq .osid "linux" }}
+if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ end }}
+
 {{ if eq .osid "darwin" }}
 # required for openjdk java to load before system java
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
