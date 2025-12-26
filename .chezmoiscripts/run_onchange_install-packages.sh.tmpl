@@ -2,8 +2,18 @@
 
 {{ template "utils" . }}
 
+# Add Homebrew to PATH if it exists at known locations
+{{ if eq .osid "linux" }}
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ else if eq .osid "darwin" }}
+if [ -x "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ end }}
+
 if exist brew; then
-    eval "$(brew shellenv)"
     info "Running run_onchange_install-packages.sh..."
 {{ template "brew" . }}
     if [ $? -eq 0 ]; then
