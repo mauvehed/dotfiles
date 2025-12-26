@@ -2,6 +2,17 @@
 
 {{ template "utils" }}
 
+# Ensure Homebrew is in PATH
+{{ if eq .osid "linux" }}
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ else if eq .osid "darwin" }}
+if [ -x "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ end }}
+
 if exist asdf; then
     info "Running run_once_after-install-asdf.sh once..."
 

@@ -6,7 +6,7 @@ use-standard-socket
 # pinentry program from GPGtools. This is the OSX 'magic sauce',
 # allowing the gpg key's passphrase to be stored in the login
 # keychain, enabling automatic key signing.
-pinentry-program $HOMEBREW_PREFIX/bin/pinentry-mac
+pinentry-program /opt/homebrew/bin/pinentry-mac
 {{ else }}
-pinentry-program $HOMEBREW_PREFIX/bin/pinentry-tty
+pinentry-program /home/linuxbrew/.linuxbrew/bin/pinentry-tty
 {{ end }}

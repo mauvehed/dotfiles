@@ -1,6 +1,6 @@
 {
-    "sync.gist": {{ if eq .osid "darwin" }}{{ if .personal}}"{{ onepasswordRead "op://personal/github.com/vscode_gist_sync" }}"{{ end }}{{ end }},
-    "git.autofetch": true,
+    {{ if and (eq .osid "darwin") .personal }}"sync.gist": "{{ onepasswordRead "op://personal/github.com/vscode_gist_sync" }}",
+    {{ end }}"git.autofetch": true,
     "sync.autoUpload": false,
     "sync.forceUpload": true,
     "sync.autoDownload": false,
