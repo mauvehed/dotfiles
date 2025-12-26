@@ -64,10 +64,10 @@ encryption = "gpg"
     personal = {{ $personal }}
     work = {{ $work }}
     osid = {{ $osID | quote }}
-    {{ if .personal }}
+    {{ if $personal }}
     name = "mauvehed"
     email = "nate@mvh.dev"
-    {{ else if .work }}
+    {{ else if $work }}
     name = "Nate Sanders"
     email = "nate.sanders@bazaarvoice.com"
     {{ else }}
