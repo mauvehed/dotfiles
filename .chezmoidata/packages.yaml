@@ -26,7 +26,6 @@ packages:
       - "jq"
       - "jless"
       - "lazygit"
-      - "mas"
       - "mdless"
       - "mosh"
       - "mtr"
@@ -122,6 +121,7 @@ packages:
     taps:
       - "1password/tap"
     brews:
+      - "mas"
       - "podman"
     casks:
       - "1password-cli"
