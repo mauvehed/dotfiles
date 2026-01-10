@@ -86,6 +86,7 @@ packages:
         - "zlib"
       casks:
         - "balenaetcher"
+        - "connectmenow"
         - "google-chrome"
         - "postman"
         - "signal"
