@@ -236,15 +236,11 @@ export GREP_COLORS='mt=1;37;41'
 # set bat theme
 export BAT_THEME=Dracula
 
-activate_venv_on_cd() {
-    echo "testing hook"
-}
-add-zsh-hook chpwd activate_venv_on_cd
-
 # Activate Python venv when entering a directory containing a ".venv" subdirectory
 activate_venv_on_cd() {
     local venv_dir=".venv"
     if [[ -d "$PWD/$venv_dir" ]]; then
+        echo "Loaded .venv environment.."
         source "$PWD/$venv_dir/bin/activate"
     fi
 }
