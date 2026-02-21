@@ -88,11 +88,13 @@ packages:
         - "balenaetcher"
         - "connectmenow"
         - "google-chrome"
+        - "ungoogled-chromium"
         - "postman"
         - "signal"
         - "stats"
-        - "tailscale"
+        - "tailscale-app"
         - "visual-studio-code"
+        - "vscodium"
         - "vlc"
     linux:
       taps:
