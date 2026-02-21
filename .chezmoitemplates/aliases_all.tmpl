@@ -14,6 +14,7 @@ alias upall="brew update && brew upgrade ; ~/.local/bin/git-config ; ~/.local/bi
 alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal time: %{time_total}\nHTTP status: %{http_code}\n" $1'
 alias oco_up='npm i -g opencommit@latest'
 alias grep="grep -d skip --color=always"
+alias mkpass="openssl rand -base64 48"
 {{ if lookPath "terraform" }}alias tf="terraform"{{ end }}
 {{ if lookPath "tldr" }}alias man="tldr"{{ end }}
 {{ if lookPath "bat" }}alias cat="bat"{{ end }}
