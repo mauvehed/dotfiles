@@ -87,7 +87,6 @@ packages:
       casks:
         - "balenaetcher"
         - "connectmenow"
-        - "google-chrome"
         - "ungoogled-chromium"
         - "postman"
         - "signal"
