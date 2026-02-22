@@ -223,13 +223,19 @@ autoload -Uz add-zsh-hook
 #  fi
 #}
 
-try_mosh_host () {
+#try_mosh_host () {
+#  local host="$1"
+#  /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/local/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /usr/bin/ssh "$host"
+#}
+
+{{ if eq .osid "darwin" }}
+ssh-tmux() {
   local host="$1"
-  /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server "$host" 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/bin/mosh-server "$host" 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/local/bin/mosh-server "$host" 2> /dev/null || /usr/bin/ssh "$host"
+  ssh -t "$host" "tmux -CC new-session -A -s main"
 }
 
-alias mosh=try_mosh_host
-
+alias ssh=ssh-tmux
+{{ end }}
 # set bold, white fg, red bg
 export GREP_COLORS='mt=1;37;41'
 
