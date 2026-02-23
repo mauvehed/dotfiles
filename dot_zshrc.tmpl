@@ -231,7 +231,7 @@ autoload -Uz add-zsh-hook
 {{ if eq .osid "darwin" }}
 ssh-tmux() {
   local host="$1"
-  ssh -t "$host" "tmux -CC new-session -A -s main"
+  ssh -t "$host" "tmux new-session -A -s main"
 }
 
 alias ssh=ssh-tmux
