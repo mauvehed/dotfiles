@@ -5,7 +5,6 @@
     "allow": [
       "Bash(gh pr view:*)",
       "Bash(python -m py_compile:*)",
-      "Read(/./**)",
       "Bash(gh api:*)",
       "Bash(gh pr diff:*)",
       "Bash(gh issue view:*)",
@@ -14,18 +13,13 @@
       "Bash(git log:*)",
       "Bash(cat:*)",
       "Bash(git show:*)",
-      "WebFetch(domain:localhost)",
-      "Bash(readlink:*)",
-      "WebFetch(domain:github.com)",
       "Bash(gh issue list:*)",
-      "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(gh label list:*)",
       "Bash(gh pr list:*)"
     ],
     "deny": [],
     "ask": []
   },
-  "model": "claude-sonnet-4-5",
   "outputStyle": "concise",
   "additionalDirectories": [
   ]
