@@ -20,7 +20,7 @@
       "Bash(gh issue list:*)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(gh label list:*)",
-      "Bash(gh pr list:*)",
+      "Bash(gh pr list:*)"
     ],
     "deny": [],
     "ask": []
