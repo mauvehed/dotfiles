@@ -59,7 +59,11 @@ def remove_black_bg(input_path, output_path):
         cy_yy = int(np.median(ys))
         dists = np.sqrt((ys.astype(float) - cy_yy) ** 2
                         + (xs.astype(float) - cx_yy) ** 2)
-        r_yy = int(np.percentile(dists, 90)) + 10
+        # Filter outlier bright pixels (cubes far from yin-yang center)
+        # before computing the glow ring radius.
+        median_dist = np.median(dists)
+        core = dists < 2 * median_dist
+        r_yy = int(np.percentile(dists[core], 90)) + 60
     else:
         cx_yy, cy_yy, r_yy = 0, 0, 0
 
@@ -68,21 +72,23 @@ def remove_black_bg(input_path, output_path):
     protected = dist_from_yy < r_yy
 
     # --- Step 2: Flood fill from edges ---
-    # BFS with 8-connectivity. Threshold 48 avoids leaking through
-    # the purple glow barriers around design elements.
-    threshold = 48
+    # BFS with 8-connectivity. Threshold must stay below the dark purple
+    # gap brightness (~40+) to avoid leaking through into the cube field.
+    threshold = 25
     visited = np.zeros((h, w), dtype=bool)
     background = np.zeros((h, w), dtype=bool)
 
     queue = deque()
     for x in range(w):
         for y in [0, h - 1]:
-            if brightness[y, x] < threshold and not visited[y, x]:
+            if (brightness[y, x] < threshold
+                    and not visited[y, x] and not protected[y, x]):
                 queue.append((y, x))
                 visited[y, x] = True
     for y in range(h):
         for x in [0, w - 1]:
-            if brightness[y, x] < threshold and not visited[y, x]:
+            if (brightness[y, x] < threshold
+                    and not visited[y, x] and not protected[y, x]):
                 queue.append((y, x))
                 visited[y, x] = True
 
@@ -95,25 +101,20 @@ def remove_black_bg(input_path, output_path):
                     continue
                 ny, nx = cy2 + dy, cx2 + dx
                 if 0 <= ny < h and 0 <= nx < w and not visited[ny, nx]:
-                    if brightness[ny, nx] < threshold:
+                    if brightness[ny, nx] < threshold and not protected[ny, nx]:
                         visited[ny, nx] = True
                         queue.append((ny, nx))
 
     # --- Step 3: Build alpha channel ---
+    # Only flood-filled pixels become transparent. Everything else is opaque.
     alpha = np.full((h, w), 255.0)
     alpha[background] = 0.0
 
-    # Outside protected zone: brightness-based alpha
-    low, high = 15, 50
-    unprotected = ~protected & ~background
-    bright_alpha = np.clip((brightness - low) / (high - low) * 255.0, 0, 255)
-    alpha[unprotected] = np.minimum(alpha[unprotected],
-                                     bright_alpha[unprotected])
-
-    # Inside protected zone near boundary: smooth 4px transition
+    # Boundary feathering: pixels within 3px of background get graduated alpha
     distances = np.full((h, w), 999, dtype=np.int32)
     distances[background] = 0
-    for dist in range(1, 5):
+    feather_radius = 3
+    for dist in range(1, feather_radius + 1):
         prev = (distances == dist - 1)
         expanded = np.zeros((h, w), dtype=bool)
         expanded[1:, :] |= prev[:-1, :]
@@ -123,16 +124,10 @@ def remove_black_bg(input_path, output_path):
         new_pixels = expanded & (distances == 999)
         distances[new_pixels] = dist
 
-    for dist in range(1, 5):
-        in_zone = (distances == dist) & protected
-        zone_thresh = 45 + dist * 13
-        dark_in_zone = in_zone & (brightness < zone_thresh)
-        dist_factor = dist / 4.0
-        bright_factor = np.clip(brightness / zone_thresh, 0, 1)
-        combined = (np.clip(dist_factor * 0.4 + bright_factor * 0.6, 0, 1)
-                    * 255.0)
-        alpha[dark_in_zone] = np.minimum(alpha[dark_in_zone],
-                                          combined[dark_in_zone])
+    for dist in range(1, feather_radius + 1):
+        feather_zone = (distances == dist) & ~background & ~protected
+        feather_alpha = (dist / feather_radius) * 255.0
+        alpha[feather_zone] = np.minimum(alpha[feather_zone], feather_alpha)
 
     pixels[:, :, 3] = alpha
     result = Image.fromarray(pixels.astype(np.uint8))
@@ -154,12 +149,11 @@ If the result is not ideal, these are the parameters to adjust in the script:
 
 | Parameter | Default | Adjust when... |
 |---|---|---|
-| `threshold` (flood fill) | 48 | Increase if dark remnants remain near edges. Decrease if fill leaks into design. |
-| `low` (alpha ramp) | 15 | Increase if dark purple design pixels outside the yin-yang are being removed. |
-| `high` (alpha ramp) | 50 | Increase for softer transitions. Decrease for sharper cutoff. |
-| `r_yy` padding | +10 | Increase if yin-yang edge is clipped. Decrease if too much background is protected. |
+| `threshold` (flood fill) | 25 | Increase (up to ~35) if dark remnants remain near edges. Decrease if fill leaks into design elements. Must stay well below dark purple brightness (~40+). |
+| `feather_radius` | 3 | Increase for softer edges. Decrease for sharper cutoff. |
+| `r_yy` padding | +60 | Increase if yin-yang edge is clipped. Decrease if too much background is protected. |
 | Bright pixel threshold | 200 | Lower if the purple glow is dimmer in a variant. |
 
 ## Why this approach
 
-The yin-yang dark half is pure black (brightness 0-1), identical to the background. No color or brightness threshold can distinguish them. The solution detects the yin-yang by its purple glow ring, protects that circular area, then uses brightness-based transparency everywhere else. The flood fill from edges handles the bulk of the background, while the brightness ramp catches interior dark pockets between cubes that the flood fill can't reach through bright barriers.
+The yin-yang dark half is pure black (brightness 0-1), identical to the background. No color or brightness threshold can distinguish them. The solution detects the yin-yang by its purple glow ring (with outlier filtering to avoid inflated radius from distant bright cubes), protects that circular area, then uses flood fill to identify only the true background. The threshold (25) stays well below the dark purple gap brightness (~40+) so the fill won't leak into the cube field. No brightness-based alpha ramp is applied — only flood-filled pixels become transparent, with a thin distance-based feather at the boundary for smooth edges.
