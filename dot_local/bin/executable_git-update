@@ -7,7 +7,7 @@ YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
 # Base directory
-BASE_DIR=~/gitwork/github
+BASE_DIR=~/gitwork
 
 # Check if the base directory exists
 if [ ! -d "$BASE_DIR" ]; then
@@ -46,7 +46,7 @@ switch_to_main_or_master() {
 }
 
 # Main script
-for directory in "$BASE_DIR"/*/*; do
+for directory in "$BASE_DIR"/*/*/*; do
     if [ -d "$directory" ]; then
         # Change to the repository directory
         cd "$directory" || { echo -e "${RED}Failed to change directory to $directory.${NC}"; continue; }
