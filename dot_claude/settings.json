@@ -1,1 +1,40 @@
-{}
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm *)",
+      "Bash(rmdir *)",
+      "Bash(docker rm *)",
+      "Bash(docker container rm *)",
+      "Bash(docker compose rm *)",
+      "Bash(docker rmi *)",
+      "Bash(docker image rm *)",
+      "Bash(docker volume rm *)",
+      "Bash(docker network rm *)",
+      "Bash(docker system prune*)",
+      "Bash(docker container prune*)",
+      "Bash(docker image prune*)",
+      "Bash(docker volume prune*)",
+      "Bash(docker network prune*)",
+      "Bash(docker compose down *-v*)",
+      "Bash(docker compose down -v*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f *)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git clean *-f*)",
+      "Bash(git checkout -- *)",
+      "Bash(git branch -D *)",
+      "Bash(* DROP TABLE *)",
+      "Bash(* DROP DATABASE *)",
+      "Bash(* TRUNCATE *)",
+      "Bash(* drop table *)",
+      "Bash(* drop database *)",
+      "Bash(* truncate table *)",
+      "Bash(kill -9 *)",
+      "Bash(killall *)",
+      "Bash(pkill *)"
+    ]
+  }
+}
