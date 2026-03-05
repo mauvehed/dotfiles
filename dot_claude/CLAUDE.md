@@ -1,5 +1,23 @@
 # Global Claude Code Instructions
 
+## Explicitness — No Ambiguity, Ever
+
+**Every reference to a file must include its full absolute path and the host/machine it lives on.**
+Never say "edit .env" or "update the config." Say "edit `/home/nate/project/app/.env` on `server-name`" or "edit `/Users/nate/project/.env` on the local Mac."
+
+**Every proposed action must state exactly what it will do.**
+Never say "apply the changes" or "update the service." Be explicit:
+- If editing a file: state the full file path and host.
+- If restarting a service: state the exact command (e.g., `systemctl restart nginx`), the full working directory, and the host.
+- If running docker compose: state the exact command (e.g., `docker compose up -d`), the full path to the compose file, and the host.
+- If running any command: state the exact command, the working directory, and the host/machine.
+
+**Never use vague verbs like "apply", "update", "configure", or "set up" without immediately specifying the concrete action** — what command, what file, what path, what host. If multiple steps are involved, list each one explicitly.
+
+**When asking for confirmation, the confirmation prompt itself must be explicit.**
+Bad: "Shall I apply the changes?"
+Good: "Shall I edit `/Users/nate/myproject/docker-compose.yml` on this Mac to add the new volume mount, then run `docker compose up -d` from `/Users/nate/myproject/`?"
+
 ## Interaction Protocol
 
 **Questions require answers, not actions.**

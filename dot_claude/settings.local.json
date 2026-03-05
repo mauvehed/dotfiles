@@ -15,12 +15,12 @@
       "Bash(git show:*)",
       "Bash(gh issue list:*)",
       "Bash(gh label list:*)",
-      "Bash(gh pr list:*)"
+      "Bash(gh pr list:*)",
+      "Bash(code:*)"
     ],
     "deny": [],
     "ask": []
   },
   "outputStyle": "concise",
-  "additionalDirectories": [
-  ]
+  "additionalDirectories": []
 }
