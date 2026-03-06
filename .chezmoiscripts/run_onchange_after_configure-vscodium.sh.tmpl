@@ -1,6 +1,5 @@
-{{ if eq .osid "darwin" }}
-
-{{ $extensions := list
+{{- if eq .osid "darwin" -}}
+{{- $extensions := list
      "1password.op-vscode"
      "akamud.vscode-theme-onedark"
      "almenon.arepl"
@@ -75,12 +74,10 @@
      "vivaxy.vscode-conventional-commits"
      "vscode-icons-team.vscode-icons"
      "vue.volar"
-     "wix.vscode-import-cost" }}
-
-{{ $paid_themes := list
+     "wix.vscode-import-cost" -}}
+{{- $paid_themes := list
      "dracula-theme-pro.theme-dracula-pro"
-     "monokai.theme-monokai-pro-vscode" }}
-
+     "monokai.theme-monokai-pro-vscode" -}}
 #!/bin/bash
 
 set -eufo pipefail
@@ -91,12 +88,11 @@ if ! command -v codium &>/dev/null; then
 fi
 
 # Install Open VSX extensions
-{{ range $extensions }}
+{{ range $extensions -}}
 codium --force --install-extension {{ . }}
 {{ end }}
-
 # Copy paid themes from VS Code if available
-{{ range $paid_themes }}
+{{ range $paid_themes -}}
 src_dir=$(find ~/.vscode/extensions -maxdepth 1 -name "{{ . }}-*" -type d 2>/dev/null | head -1)
 if [ -n "$src_dir" ]; then
   dir_name=$(basename "$src_dir")
@@ -125,6 +121,5 @@ if [ -n "$src_dir" ]; then
     fi
   fi
 fi
-{{ end }}
-
+{{ end -}}
 {{ end }}
