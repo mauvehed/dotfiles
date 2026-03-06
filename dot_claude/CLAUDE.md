@@ -29,6 +29,18 @@ When asked for recommendations or a plan, provide complete analysis upfront. Do 
 **Discuss before executing.**
 I verbally process and ask questions to explore ideas. Do not take action in response to exploratory questions — I want to discuss before committing to an approach.
 
+## SSH Command Execution
+
+**SSH commands MUST always include `cd` to the working directory.**
+When running commands on remote hosts via `ssh`, ALWAYS use the form:
+```
+ssh <host> "cd <working-directory> && <command>"
+```
+NEVER run `ssh <host> "docker compose ..."` or `ssh <host> "systemctl ..."` or any service/deployment command without an explicit `cd` to the working directory first. There are no exceptions. The remote shell starts in `~`, which is never the right place.
+
+**When retrying a failed SSH command, actually fix the command.**
+If an SSH command fails because of a missing `cd`, do not re-run the same broken command. Add the `cd <directory> &&` prefix. If you catch yourself about to run the same failing command again, stop and think about what went wrong.
+
 ## Safety Rules
 
 **Destructive operations require explicit confirmation.**
