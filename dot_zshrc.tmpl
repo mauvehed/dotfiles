@@ -228,14 +228,13 @@ autoload -Uz add-zsh-hook
 #  /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/local/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /usr/bin/ssh "$host"
 #}
 
-{{ if eq .osid "darwin" }}
+# setup tmux ssh alias
 ssh-tmux() {
   local host="$1"
   ssh -t "$host" "tmux new-session -A -s main"
 }
 
-alias ssh=ssh-tmux
-{{ end }}
+alias tssh=ssh-tmux
 # set bold, white fg, red bg
 export GREP_COLORS='mt=1;37;41'
 
