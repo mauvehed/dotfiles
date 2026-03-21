@@ -6,12 +6,12 @@ INSTALL_CHECK=false
 
 {{ template "utils" }}
 
-{{ if eq .osid "linux" }}
+{{ if eq .chezmoi.os "linux" }}
 INSTALL_CHECK=true
 {{ if eq .chezmoi.arch "arm64" }}
 INSTALL_CHECK=false
 {{ end }}
-{{ else if eq .osid "darwin" }}
+{{ else if eq .chezmoi.os "darwin" }}
 INSTALL_CHECK=true
 {{ end }}
 
