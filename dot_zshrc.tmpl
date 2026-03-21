@@ -24,9 +24,9 @@ fi
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 {{ end }}
 
-{{ if lookPath "yarn" }}
-export PATH="$(yarn global bin):$PATH"
-{{ end }}
+if command -v yarn &>/dev/null; then
+  export PATH="$(yarn global bin):$PATH"
+fi
 
 export PATH="$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.local/bin/update/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/git-fuzzy/bin:$PATH"
 
@@ -54,22 +54,22 @@ zstyle :omz:plugins:ssh-agent lazy yes
 ############################################################
 {{ end }}
 
-{{ if lookPath "zoxide" }}
-eval "$(zoxide init zsh)"
-{{ end }}
-
-{{ if lookPath "oh-my-posh" }}
-if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
-  # Skip Oh My Posh entirely for Apple Terminal
-  :
-elif [ "$TERM_PROGRAM" = "vscode" ]; then
-  # Load minimal config for VS Code
-  eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/vscode-minimal.omp.json)"
-else
-  # Load your full theme for everything else
-  eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/mauvehed.omp.json)"
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
 fi
-{{ end }}
+
+if command -v oh-my-posh &>/dev/null; then
+  if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+    # Skip Oh My Posh entirely for Apple Terminal
+    :
+  elif [ "$TERM_PROGRAM" = "vscode" ]; then
+    # Load minimal config for VS Code
+    eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/vscode-minimal.omp.json)"
+  else
+    # Load your full theme for everything else
+    eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/mauvehed.omp.json)"
+  fi
+fi
 
 
 {{ if .personal }}

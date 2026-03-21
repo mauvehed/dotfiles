@@ -2,11 +2,9 @@
 ############################ Begin .aliases_git ############################
 alias ga="git add"
 alias gap="git add --patch"
-alias gdb="gdb -q"
 alias gb="git branch"
 alias gbc="git checkout -b"
 alias gba="git branch -a"
-alias gca="git commit -a"
 alias gcm="git commit -m"
 alias gco="git checkout"
 alias gca="git commit -av"
@@ -20,5 +18,4 @@ alias gtree="git log --graph --pretty=oneline --abbrev-commit"
 alias gup="git checkout main && git fetch --all && git reset --hard upstream/main"
 alias gf="git-fuzzy"
 alias gpa='git pull && git submodule update --init --recursive --remote'
-{{ if lookPath "oco" }}alias gc="oco"{{ else }}alias gc="git commit -v"
-{{ end }}
+if command -v oco &>/dev/null; then alias gc="oco"; else alias gc="git commit -v"; fi

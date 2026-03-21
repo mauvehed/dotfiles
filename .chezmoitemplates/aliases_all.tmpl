@@ -3,27 +3,27 @@ alias ctop='docker run --rm -ti -l com.centurylinklabs.watchtower.enable=false -
 alias czup='cz update -R -a && source ~/.aliases && cz update -R -a'
 alias fp='fzf --preview "bat --style=numbers --color=always --line-range :500 {}"'
 alias zf='fzf --preview "bat --color=always {}"'
-alias irpg="/usr/bin/ssh -i ~/.ssh/id_rsa_bperry_shell mvhd@volatileminds.net"
 alias gpgtest="echo 'test' | gpg --clearsign"
-alias llt="\ls -lart --color"
+{{ if eq .osid "darwin" }}alias llt="\ls -lart -G"{{ else }}alias llt="\ls -lart --color"{{ end }}
 alias di="docker ps -a | fzf --preview 'docker inspect {1}'"
-alias moshb='mosh --server=/usr/bin/mosh-server $*'
-alias moshl='mosh --server=/usr/local/bin/mosh-server $*'
+alias moshb='mosh --server=/usr/bin/mosh-server'
+alias moshl='mosh --server=/usr/local/bin/mosh-server'
 alias myip="/usr/bin/curl https://yourip.app/raw"
 alias upall="brew update && brew upgrade ; ~/.local/bin/git-config ; ~/.local/bin/git-update ; chezmoi -R update {{ if eq .osid "darwin" }}; mas upgrade{{ end }}"
-alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal time: %{time_total}\nHTTP status: %{http_code}\n" $1'
+alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal time: %{time_total}\nHTTP status: %{http_code}\n"'
 alias oco_up='npm i -g opencommit@latest'
 alias grep="grep -d skip --color=always"
 alias mkpass="openssl rand -base64 48"
-{{ if lookPath "tailscale" }}alias tssh="tailscale ssh"{{ end }}
-{{ if lookPath "terraform" }}alias tf="terraform"{{ end }}
-{{ if lookPath "tldr" }}alias man="tldr"{{ end }}
-{{ if lookPath "bat" }}alias cat="bat"{{ end }}
-{{ if lookPath "zoxide" }}alias cd="z"{{ end }}
-{{ if lookPath "eza" }}alias ls="eza -g --color=always --icons --git-repos"{{ end }}
-{{ if lookPath "eza" }}alias lsn="eza -g"{{ end }}
-{{ if lookPath "eza" }}alias llc='eza -lag --sort=modified --color=always --icons --git-repos'{{ end }}
-{{ if lookPath "eza" }}alias lt="eza -g --color=always --icons --git-repos -la -T"{{ end }}
-{{ if lookPath "shred" }}alias shred="shred -zvu -n 5"{{ end }}
-{{ if lookPath "vim" }}alias vi="vim"{{ end }}
-{{ if lookPath "podman" }}alias docker="podman"{{ end }}
+command -v tailscale &>/dev/null && alias tssh="tailscale ssh"
+command -v terraform &>/dev/null && alias tf="terraform"
+command -v tldr &>/dev/null && alias man="tldr"
+command -v bat &>/dev/null && alias cat="bat"
+command -v zoxide &>/dev/null && alias cd="z"
+command -v eza &>/dev/null && alias ls="eza -g --color=always --icons --git-repos"
+command -v eza &>/dev/null && alias lsn="eza -g"
+command -v eza &>/dev/null && alias llc='eza -lag --sort=modified --color=always --icons --git-repos'
+command -v eza &>/dev/null && alias lt="eza -g --color=always --icons --git-repos -la -T"
+command -v shred &>/dev/null && alias shred="shred -zvu -n 5"
+command -v gdb &>/dev/null && alias gdb="gdb -q"
+command -v vim &>/dev/null && alias vi="vim"
+command -v podman &>/dev/null && alias docker="podman"
