@@ -5,6 +5,7 @@
 {{ if eq .chezmoi.os "linux" }}
 info "Installing system packages via apt..."
 sudo apt-get update -qq
-sudo apt-get install -y -qq build-essential zsh
+sudo apt-get install -y -qq build-essential zsh \
+  zlib1g-dev libssl-dev libbz2-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
 success "System packages installed"
 {{ end }}
