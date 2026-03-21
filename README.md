@@ -1,133 +1,151 @@
 [![gitleaks](https://github.com/mauvehed/dotfiles/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/mauvehed/dotfiles/actions/workflows/gitleaks.yml)
 
-# dotfiles & config management
+# dotfiles
 
-My collection of my dotfiles used across multiple systems and managed by [chezmoi](https://www.github.com/twpayne/chezmoi).
-
-## Core Prerequisite
-
-To get started, you primarily need a shell environment with `curl` or `wget` to download and execute the `chezmoi` installation script.
+Personal dotfiles for macOS and Linux, managed by [chezmoi](https://www.chezmoi.io/).
 
 ## Quick Start
 
-The following command will download and install `chezmoi` (if not already present), initialize it with this dotfiles repository, and apply the configuration. This process will also install and configure other necessary tools such as Homebrew, Zsh, oh-my-zsh, oh-my-posh, and the 1Password CLI.
-
 ```sh
-  sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply mauvehed
-```
-### Edit config for machine type
-
-After the first run of the install script, we'll need to manually edit the chezmoi config in order to set the machine type. This will enable to full package installation.
-
-```sh
-  chezmoi edit-config
+sh -c "$(curl -fsSL get.chezmoi.io)" -- init --apply mauvehed
 ```
 
-Set `personal = true` or `work = true` depending on the needs. 
+This downloads chezmoi, clones this repo, and runs the initial apply. On Linux, system packages (build-essential, zsh, Python build dependencies) are installed via apt first, then Homebrew, 1Password CLI, brew packages, and asdf runtimes are installed automatically.
 
-Once this is done, re-run chezmoi to force the rest of the install.
+### Set Machine Type
+
+After the first run, edit the chezmoi config to set the machine type:
 
 ```sh
-  chezmoi --force apply
+chezmoi edit-config
 ```
+
+Set `personal = true` or `work = true`, then re-apply:
+
+```sh
+chezmoi --force apply
+```
+
+Known hostnames (e.g. `cypher`, `airblade`, `computah`) are auto-detected and don't require manual config.
 
 ### 1Password Integration
 
-Personal secrets are stored in [1Password](https://1password.com). The `chezmoi` setup will install the [1Password CLI](https://developer.1password.com/docs/cli/).
-
-1.  **After the initial `chezmoi apply` completes**, you must sign in to the 1Password CLI:
-    ```sh
-    eval $(op signin)
-    ```
-2.  **Re-apply `chezmoi` (if needed)**: If the initial `chezmoi apply` could not fully provision all configurations due to 1Password not being authenticated, run the apply command again after signing in:
-    ```sh
-    chezmoi apply
-    ```
-
-## Tools Managed by These Dotfiles
-
-These dotfiles, through `chezmoi`, will install and manage the following tools and configurations on your system:
-
-| Name                | Description                                       | Managed |
-| ------------------- | ------------------------------------------------- | -------- |
-| Terminal            | [iTerm2](https://iterm2.com) (macOS)              | Optional |
-| Package manager     | [Homebrew](https://brew.sh/)                      | Yes      |
-| Shell               | [Zsh](https://www.zsh.org/)                       | Yes      |
-| Shell Framework     | [oh-my-zsh](https://ohmyzsh.org/)                 | Yes      |
-| Shell Prompt Customizer | [oh-my-posh](https://ohmyposh.dev)              | Yes      |
-| Dotfiles manager    | [chezmoi](https://chezmoi.io/)                    | Yes      |
-| Password Manager CLI| [1Password CLI](https://www.1password.com/)       | Yes      |
-
-## Command Reference
-
-To add new files to chezmoi control:
+Secrets are stored in [1Password](https://1password.com) and fetched via `onepasswordRead` in templates. After the initial apply:
 
 ```sh
-chezmoi add <file>
-```
-
-To edit a file under chezmoi control:
-
-```sh
-chezmoi edit <file>
-```
-
-To preview changes before applying:
-
-```sh
-chezmoi diff
-```
-
-To apply changes from `.local/share/chezmoi/` to ~/ use:
-
-```sh
+eval $(op signin)
 chezmoi apply
 ```
 
-To both `git pull` and `chezmoi apply` use `update`
+## What's Managed
+
+### Shell
+
+| Tool | Purpose |
+|---|---|
+| [Zsh](https://www.zsh.org/) | Shell |
+| [oh-my-zsh](https://ohmyzsh.org/) | Shell framework and plugins |
+| [oh-my-posh](https://ohmyposh.dev) | Prompt theme engine |
+| [fzf](https://github.com/junegunn/fzf) | Fuzzy finder with fd integration |
+| [zoxide](https://github.com/ajeetdsouza/zoxide) | Smart cd replacement |
+| [eza](https://github.com/eza-community/eza) | Modern ls replacement |
+| [bat](https://github.com/sharkdp/bat) | Cat replacement with syntax highlighting |
+
+### Shell Config Load Order
+
+1. `~/.zshenv` - XDG dirs, GPG, asdf env vars
+2. `~/.zprofile` - Login shell (minimal)
+3. `~/.zshrc` - Homebrew, PATH, oh-my-zsh plugins, oh-my-posh, fzf, zoxide, asdf, 1Password SSH agent, iTerm2 integration, ssh-tmux wrapper, Python venv auto-activation
+4. `~/.aliases` - Alias aggregator (sources per-platform alias files)
+
+### Aliases
+
+Aliases are composed from templates in `.chezmoitemplates/`:
+
+- `aliases_all.tmpl` - Cross-platform (docker, fzf, eza, bat, zoxide, tailscale, mosh)
+- `aliases_git.tmpl` - Git shortcuts (ga, gb, gco, gd, gl, gp, gst)
+- `aliases_macos.tmpl` - macOS-only
+- `aliases_linuxos.tmpl` - Linux-only
+
+Aliases use conditional checks to only activate when the target binary is present.
+
+### Dev Tools
+
+| Tool | Purpose |
+|---|---|
+| [asdf](https://asdf-vm.com/) | Runtime version manager (Node.js, Python, Go) |
+| [direnv](https://direnv.net/) | Per-directory environment variables (via Homebrew) |
+| [Neovim](https://neovim.io/) | Editor with Lazy plugin manager |
+| [tmux](https://github.com/tmux/tmux) | Terminal multiplexer with Dracula theme |
+| [git](https://git-scm.com/) | With diff-so-fancy, SSH signing via 1Password |
+
+### Packages
+
+Homebrew packages are defined in `.chezmoidata/packages.yaml` and installed via `brew bundle`. Packages are organized hierarchically:
+
+- `core` - Installed everywhere
+- `personal.core` / `work.core` - Machine-type specific
+- `darwin` / `linux` - OS-specific
+- `personal.darwin` / `personal.linux` - Machine-type + OS specific
+
+### Managed Configs
+
+- `~/.config/git/config` - Global git config (SSH signing, diff-so-fancy, URL rewrites)
+- `~/.config/nvim/` - Neovim with Lazy plugins
+- `~/.config/oh-my-posh/themes/` - Custom prompt themes
+- `~/.config/iterm2/` - iTerm2 profile and Dracula color scheme
+- `~/.config/btop/` - btop with Dracula theme
+- `~/.claude/` - Claude Code settings and hooks
+- `~/.ssh/` - SSH config (keys from 1Password)
+- `~/.tmux.conf` - tmux with TPM and Dracula theme
+
+### Custom Scripts (`~/.local/bin/`)
+
+- `git-update` - Batch-pull all repos under `~/gitwork/*/*/*`
+- `git-config` - Set per-repo git user/email for multiple GitHub orgs
+- `git-upstream` - Git upstream management
+- `brew-update` - Homebrew update wrapper
+- `crt.sh` - Certificate transparency lookup
+- `randkey` - Random key generator
+- `check_uptime.sh` - Warn if uptime exceeds 60 days
+- `fzf-git.sh` - fzf git integration helpers
+
+### External Resources
+
+Managed via `.chezmoiexternal.toml.tmpl` with auto-refresh:
+
+- oh-my-zsh + zsh-syntax-highlighting plugin
+- MesloLGS Nerd Font files
+- fzf shell integrations
+- tmux Plugin Manager (TPM)
+- git-fuzzy
+- Dracula eza color theme
+
+## Security
+
+- Secrets are fetched from 1Password at apply time via `onepasswordRead`
+- [gitleaks](https://github.com/gitleaks/gitleaks) runs via pre-commit hook and GitHub Actions
+- Git commits are signed with SSH keys via 1Password
+
+## Command Reference
 
 ```sh
-chezmoi update
-```
-
-To force a refresh the downloaded archives (from .`chezmoiexternal.toml`), use the --refresh-externals (-R) flag to chezmoi apply:
-
-```sh
-chezmoi -R apply
-```
-
-To test chezmoi template files (.tmpl):
-```sh
-chezmoi execute-template < dot_gitconfig.tmpl
-```
-
-## Chezmoi and Git
-
-To execute git commands within the chezmoi source director you can append them to the *chezmoi* command
-
-Git pull:
-
-```sh
-chezmoi git pull
-```
-
-Git push:
-
-```sh
-chezmoi git push
-```
-
-Git status:
-
-```sh
-chezmoi git status
+chezmoi diff                        # Preview changes before applying
+chezmoi apply -v                    # Apply changes verbosely
+chezmoi -R apply                    # Force refresh external resources
+chezmoi edit <file>                 # Edit a managed file
+chezmoi add <file>                  # Add a file to chezmoi
+chezmoi add --template <file>       # Add as a template
+chezmoi execute-template < f.tmpl   # Test template rendering
+chezmoi data                        # View all template data
+chezmoi update                      # git pull + chezmoi apply
+chezmoi git status                  # Run git in chezmoi source dir
 ```
 
 ## Resources
 
-* [Repo Docs/](docs/)
-* [Install](https://www.chezmoi.io/install/)
-* [Quick Start](https://www.chezmoi.io/quick-start/#using-chezmoi-across-multiple-machines)
-* [Setup](https://www.chezmoi.io/user-guide/setup/)
-* [Chezmoi Github](https://github.com/twpayne/chezmoi)
-* [Chezmoi Web](https://chezmoi.io)
+- [Repo Docs](docs/)
+- [chezmoi Install](https://www.chezmoi.io/install/)
+- [chezmoi Quick Start](https://www.chezmoi.io/quick-start/#using-chezmoi-across-multiple-machines)
+- [chezmoi User Guide](https://www.chezmoi.io/user-guide/setup/)
+- [chezmoi GitHub](https://github.com/twpayne/chezmoi)
