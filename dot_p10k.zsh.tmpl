@@ -102,9 +102,9 @@
     # nix_shell              # nix shell (https://nixos.org/nixos/nix-pills/developing-with-nix-shell.html)
     chezmoi_shell          # chezmoi shell (https://www.chezmoi.io/)
     # vi_mode                # vi mode (you don't need this if you've enabled prompt_char)
-    {{ if eq .osid "linux" }}load                    # CPU load{{ else if eq .hostname "cypher"}}load                    # CPU load{{ end }}
-    {{ if eq .osid "linux" }}disk_usage             # disk usage{{ end }}
-    {{ if eq .osid "linux"}}ram                     # free RAM{{ else if eq .hostname "cypher"}}ram                     # free RAM{{ end }}
+    {{ if eq .chezmoi.os "linux" }}load                    # CPU load{{ else if eq .hostname "cypher"}}load                    # CPU load{{ end }}
+    {{ if eq .chezmoi.os "linux" }}disk_usage             # disk usage{{ end }}
+    {{ if eq .chezmoi.os "linux"}}ram                     # free RAM{{ else if eq .hostname "cypher"}}ram                     # free RAM{{ end }}
     {{ if eq .hostname "cypher"}}swap                  # used swap{{ end }}
     # todo                   # todo items (https://github.com/todotxt/todo.txt-cli)
     # timewarrior            # timewarrior tracking status (https://timewarrior.net/)

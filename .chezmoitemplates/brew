@@ -6,7 +6,7 @@
     tap {{ . | quote }}
     {{ end }}
 
-    # Add Peronsal Core Taps
+    # Add Personal Core Taps
     {{ if .personal }}
       {{ range .packages.personal.core.taps }}
         tap {{ . | quote }}
@@ -22,7 +22,7 @@
 
     ###################################
     # Add darwin taps
-    {{ if eq .osid "darwin" }}
+    {{ if eq .chezmoi.os "darwin" }}
       {{ range .packages.darwin.taps }}
         tap {{ . | quote }}
       {{ end }}
@@ -39,7 +39,7 @@
 
     ###################################
     # Add linux taps
-    {{ if eq .osid "linux" }}
+    {{ if eq .chezmoi.os "linux" }}
       {{ range .packages.linux.taps }}
         tap {{ . | quote }}
       {{ end }}
@@ -60,7 +60,7 @@
       brew {{ . | quote }}
     {{ end }}
 
-    # Add Peronsal Core brews
+    # Add Personal Core brews
     {{ if .personal }}
       {{ range .packages.personal.core.brews }}
         brew {{ . | quote }}
@@ -76,7 +76,7 @@
 
     ###################################
     # Add Darwin Brews
-    {{ if eq .osid "darwin" }}
+    {{ if eq .chezmoi.os "darwin" }}
       {{ range .packages.darwin.brews }}
         brew {{ . | quote }}
       {{ end }}
@@ -93,7 +93,7 @@
 
     ###################################
     # Add Linux Brews
-    {{ if eq .osid "linux" }}
+    {{ if eq .chezmoi.os "linux" }}
       {{ range .packages.linux.brews }}
         brew {{ . | quote }}
       {{ end }}
@@ -115,7 +115,7 @@
         cask {{ . | quote }}
       {{ end }}
 
-      # Add Peronsal Core Casks
+      # Add Personal Core Casks
       {{ if .personal }}
         {{ range .packages.personal.core.casks }}
           cask {{ . | quote }}
@@ -130,7 +130,7 @@
       {{ end }}
 
       # Add Darwin Casks
-      {{ if eq .osid "darwin" }}
+      {{ if eq .chezmoi.os "darwin" }}
         {{ range .packages.darwin.casks }}
           cask {{ . | quote }}
         {{ end }}
@@ -146,7 +146,7 @@
       {{ end }}
 
       # Add Linux Casks
-      {{ if eq .osid "linux" }}
+      {{ if eq .chezmoi.os "linux" }}
         {{ range .packages.linux.casks }}
           cask {{ . | quote }}
         {{ end }}

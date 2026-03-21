@@ -13,7 +13,7 @@
 if [ -f "/opt/homebrew/bin/brew" ]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
-{{ else if eq .osid "linux" }}
+{{ else if eq .chezmoi.os "linux" }}
 if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
@@ -46,7 +46,7 @@ then
     export OP_BIOMETRIC_UNLOCK_ENABLED=true
 fi
 ############################################################
-{{ else if eq .osid "linux" }}
+{{ else if eq .chezmoi.os "linux" }}
 ############################################################
 # enable quiet & lazy to silence ssh-agent from interrupting p10k prompt
 zstyle :omz:plugins:ssh-agent quiet yes
@@ -124,14 +124,14 @@ plugins=(
   vscode
   aws
   asdf
-  direnv
   virtualenv
   zsh-syntax-highlighting
 )
 
 # Update your ~/.zshrc configuration before sourcing oh-my-zsh:
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-autoload -U compinit && compinit
+# prevent oh-my-zsh from auto updating (updates happen via chezmoi -R apply/update)
+zstyle ':omz:update' mode disabled
 # call and load oh-my-zsh
 [ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
 
@@ -170,6 +170,8 @@ _fzf_compgen_dir() {
 
 source ~/.local/bin/fzf-git.sh
 
+show_file_or_dir_preview="bat -n --color=always {} 2>/dev/null || eza --tree --color=always {}"
+
 # Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
 # - You should make sure to pass the rest of the arguments to fzf.
@@ -185,9 +187,8 @@ _fzf_comprun() {
   esac
 }
 
-# execute asdf & direnv
+# execute asdf
 [ -f $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh ] && . $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
-[ -f $XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc ] && . $XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc
 
 # dracula theme for eza/exa
 [ -f ~/.local/share/zsh/site-functions/exa_colors.zshrc ] && . ~/.local/share/zsh/site-functions/exa_colors.zshrc
@@ -258,5 +259,4 @@ fi
 #  unalias cd
 #fi
 
-autoload -U add-zsh-hook
 add-zsh-hook chpwd activate_venv_on_cd
