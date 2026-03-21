@@ -1,0 +1,10 @@
+#!/bin/bash
+
+{{ template "utils" }}
+
+{{ if eq .chezmoi.os "linux" }}
+info "Installing system packages via apt..."
+sudo apt-get update -qq
+sudo apt-get install -y -qq build-essential zsh
+success "System packages installed"
+{{ end }}
