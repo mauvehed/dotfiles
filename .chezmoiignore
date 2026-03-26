@@ -3,6 +3,8 @@ README.md
 CLAUDE.md
 docs/
 .pre-commit-config.yaml
+.claude/settings.local.json
+.config/btop/btop.conf
 {{ if eq .chezmoi.os "windows" }}
 *.sh
 Library
