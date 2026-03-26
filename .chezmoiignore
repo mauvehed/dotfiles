@@ -1,5 +1,6 @@
 LICENSE
 README.md
+CLAUDE.md
 docs/
 .pre-commit-config.yaml
 {{ if eq .chezmoi.os "windows" }}
