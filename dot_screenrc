@@ -1,0 +1,12 @@
+#
+# password <hash>
+#
+# [ hostname ][ 0-$ window (1*$ current window) ][ YYYY-mm-dd HH:ss ]
+caption always "%{gk}[ %{g}%H %{g}][%= %{wk}%?%-Lw%?%{r}(%{w}%n*%f %t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{b} %Y-%m-%d %{w}%c %{g}]"
+#
+vbell off
+#
+defflow off
+deflogin on
+#
+startup_message off

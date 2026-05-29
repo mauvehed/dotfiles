@@ -1,0 +1,141 @@
+packages:
+  core:
+    taps:
+      - "turbot/tap"
+      - "jandedobbeleer/oh-my-posh"
+      - "hashicorp/tap"
+    brews:
+      - "age"
+      - "asdf"
+      - "bat"
+      - "btop"
+      - "curl"
+      - "chezmoi"
+      - "coreutils"
+      - "diff-so-fancy"
+      - "direnv"
+      - "eza"
+      - "fd"
+      - "fzf"
+      - "git"
+      - "git-delta"
+      - "git-lfs"
+      - "grep"
+      - "htop"
+      - "hugo"
+      - "jq"
+      - "jless"
+      - "lazygit"
+      - "mdless"
+      - "mosh"
+      - "mtr"
+      - "ncdu"
+      - "neovim"
+      - "nmap"
+      - "oh-my-posh"
+      - "opentofu"
+      - "pre-commit"
+      - "tfenv"
+      - "tlrc"
+      - "tmux"
+      - "turbot/tap/steampipe"
+      - "vim"
+      - "wget"
+      - "yarn"
+      - "uv"
+      - "zoxide"
+      - "zsh"
+    casks:
+      - "font-fira-code-nerd-font"
+  personal:
+    core:
+      taps:
+      brews:
+        - "gh"
+        - "gitleaks"
+        - "gnupg"
+        - "vercel-cli"
+      casks:
+      npm:
+      pip:
+        - poetry
+    darwin:
+      taps:
+        - "snyk/tap"
+        - "teamookla/speedtest"
+      brews:
+        - "awscli"
+        - "dockutil"
+        - "ffmpeg"
+        - "flyctl"
+        - "iperf3"
+        - "netlify-cli"
+        - "nuclei"
+        - "openssl@3"
+        - "pinentry-mac"
+        - "poetry"
+        - "readline"
+        - "ripgrep"
+        - "rsync"
+        - "semgrep"
+        - "snyk/tap/snyk"
+        - "sqlite"
+        - "teamookla/speedtest/speedtest"
+        - "telnet"
+        - "yt-dlp"
+        - "xz"
+        - "zlib"
+      casks:
+        - "balenaetcher"
+        - "connectmenow"
+        - "ghostty"
+        - "postman"
+        - "signal"
+        - "stats"
+        - "tailscale-app"
+        - "ungoogled-chromium"
+        - "visual-studio-code"
+        - "vscodium"
+        - "vlc"
+    linux:
+      taps:
+      brews:
+      casks:
+        - "ghostty"
+  work:
+    core:
+      taps:
+        - "snyk/tap"
+      brews:
+        - "gh"
+        - "gitleaks"
+        - "semgrep"
+        - "snyk/tap/snyk"
+      casks:
+      npm:
+      pip:
+    darwin:
+      taps:
+      brews:
+      casks:
+    linux:
+      taps:
+      brews:
+      casks:
+  darwin:
+    taps:
+      - "1password/tap"
+    brews:
+      - "mas"
+      - "podman"
+    casks:
+      - "1password-cli"
+      - "iterm2"
+      - "keka"
+      - "podman-desktop"
+      - "stats"
+      - "alt-tab"
+  linux:
+    taps:
+    brews:
+    casks:

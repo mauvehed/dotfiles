@@ -1,0 +1,57 @@
+# vim: ft=bash:
+#
+#!/bin/bash
+
+# Define colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Function to update Git user configuration
+update_git_config() {
+    local directory="$1"
+    local username="$2"
+    local email="$3"
+
+    if [ -d "$directory" ]; then
+        for repo_dir in "$directory"/*; do
+            if [ -d "$repo_dir" ]; then
+                (
+                    cd "$repo_dir" || exit
+                    git config user.name "$username"
+                    git config user.email "$email"
+                    echo -e "${YELLOW}Updated Git user configuration for $(basename "$repo_dir")${NC}"
+                )
+            fi
+        done
+        echo -e "${GREEN}[*] Updated repositories in $directory${NC}"
+    else
+        echo -e "${RED}[!] Directory $directory does not exist${NC}"
+    fi
+}
+
+# Update configurations for mauvehed@github repositories
+update_git_config "$HOME/gitwork/github/mauvehed" "mauvehed" "mh@mvh.dev"
+
+# Update configurations for mauvehed@github repositories
+update_git_config "$HOME/gitwork/gitea/mauvehed" "mauvehed" "mh@mvh.dev"
+
+# Update configurations for chezmoi local repository
+update_git_config "$HOME/.local/share/chezmoi" "mauvehed" "mh@mvh.dev"
+
+# Update configurations for attrition-org@github organization repositories
+update_git_config "$HOME/gitwork/github/attrition-org" "mauvehed" "mauvehed@attrition.org"
+
+# Update configurations for red-team-offensive-village@github organization repositories
+update_git_config "$HOME/gitwork/github/red-team-offensive-village" "mauvehed" "mauvehed@redteamvillage.io"
+
+# Update configurations for AustinHackers@github organization repositories
+update_git_config "$HOME/gitwork/github/AustinHackers" "mauvehed" "mh@mvh.dev"
+
+# Update configurations for ConTechCrew@github organization repositories
+update_git_config "$HOME/gitwork/github/ConTechCrew" "Nate Sanders" "nate.sanders@contechcrew.org"
+{{ if .work }}
+# Update configurations for work organization repositories
+update_git_config "$HOME/gitwork/github/bvengineering" "{{ .name }}" "{{ .email }}"
+{{end}}

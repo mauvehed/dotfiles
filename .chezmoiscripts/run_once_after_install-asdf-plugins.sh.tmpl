@@ -1,0 +1,45 @@
+#!/bin/bash
+
+{{ template "utils" }}
+
+# Ensure Homebrew is in PATH
+{{ if eq .chezmoi.os "linux" }}
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ else if eq .chezmoi.os "darwin" }}
+if [ -x "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ end }}
+
+if exist asdf; then
+    info "Running run_once_after-install-asdf.sh once..."
+
+    # Install asdf
+    # https://asdf-vm.com/guide/getting-started.html
+    # nodejs
+    if ! asdf list nodejs >/dev/null 2>&1; then
+        info "Installing nodejs with asdf."
+        asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+        asdf install nodejs latest
+        asdf set --home nodejs latest
+    fi
+
+    # golang
+    if ! asdf list golang >/dev/null 2>&1; then
+        info "Installing golang with asdf."
+        asdf plugin add golang https://github.com/kennyp/asdf-golang.git
+        asdf install golang latest
+        asdf set --home golang latest
+    fi
+
+    # python
+    if ! asdf list python >/dev/null 2>&1; then
+        info "Installing python with asdf."
+        asdf plugin add python
+        asdf install python latest
+        asdf set --home python latest
+    fi
+
+fi

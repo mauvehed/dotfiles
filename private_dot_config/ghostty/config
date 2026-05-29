@@ -1,0 +1,17 @@
+# https://ghostty.zerebos.com/settings/mouse
+
+term = xterm-256color
+font-family = "MesloLGS Nerd Font"
+font-size = 14
+theme = dracula
+cursor-style-blink = false
+cursor-color = #bbbbbb
+scrollback-limit = 25000000
+mouse-hide-while-typing = true
+window-padding-x = 4
+window-padding-y = 4
+window-save-state = always
+clipboard-paste-protection = true
+window-new-tab-position = end
+keybind = super+left=previous_tab
+keybind = super+right=next_tab

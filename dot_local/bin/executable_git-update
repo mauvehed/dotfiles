@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Define colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Base directory
+BASE_DIR=~/gitwork
+
+# Check if the base directory exists
+if [ ! -d "$BASE_DIR" ]; then
+    echo -e "${RED}Directory $BASE_DIR does not exist.${NC}"
+    exit 1
+fi
+
+# Function to check if the directory exists
+check_directory_exists() {
+    if [ ! -d "$1" ]; then
+        echo -e "${RED}Directory $1 does not exist.${NC}"
+        return 1
+    fi
+}
+
+# Function to pull changes from git
+pull_changes() {
+    echo -e "${YELLOW}Pulling changes from git...${NC}"
+    git pull || { echo -e "${RED}Failed to pull changes from git.${NC}"; return 1; }
+}
+
+# Function to check and switch to main or master branch
+switch_to_main_or_master() {
+    local branch
+    branch=$(git rev-parse --abbrev-ref HEAD)
+
+    if [[ "$branch" == "main" || "$branch" == "master" ]]; then
+        return 0
+    fi
+
+    echo -e "${YELLOW}Attempting to switch to main or master branch...${NC}"
+    git checkout main 2>/dev/null || git checkout master 2>/dev/null || {
+        echo -e "${RED}Failed to switch to main or master branch.${NC}"
+        return 1
+    }
+}
+
+# Main script
+for directory in "$BASE_DIR"/*/*/*; do
+    if [ -d "$directory" ]; then
+        # Change to the repository directory
+        cd "$directory" || { echo -e "${RED}Failed to change directory to $directory.${NC}"; continue; }
+        echo -e "${GREEN}Processing repository: $(pwd)${NC}"
+
+        # Check if upstream branch is set
+        if ! git rev-parse --abbrev-ref --symbolic-full-name @{u} >/dev/null 2>&1; then
+            echo -e "${YELLOW}No upstream branch set. Skipping pull.${NC}"
+            echo
+            continue
+        fi
+
+        # Attempt to switch to main or master branch
+        if ! switch_to_main_or_master; then
+            echo -e "${YELLOW}Skipping pull for repository: $(pwd)${NC}"
+            echo
+            continue
+        fi
+
+        # Pull changes from git
+        if ! pull_changes; then
+            echo -e "${YELLOW}Skipping further actions for repository: $(pwd)${NC}"
+            echo
+            continue
+        fi
+
+        echo -e "${GREEN}Successfully updated repository: $(pwd)${NC}"
+        echo
+    fi
+done
+
+echo -e "${GREEN}Script execution completed.${NC}"

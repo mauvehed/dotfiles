@@ -1,0 +1,262 @@
+# vim: ft=zsh:
+#
+# XDG spec reference: https://wiki.archlinux.org/title/XDG_Base_Directory
+
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
+
+# Initialize Homebrew for all interactive shells
+{{ if eq .osid "darwin" }}
+if [ -f "/opt/homebrew/bin/brew" ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+{{ else if eq .chezmoi.os "linux" }}
+if [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+{{ end }}
+
+{{ if eq .osid "darwin" }}
+# required for openjdk java to load before system java
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+{{ end }}
+
+if command -v yarn &>/dev/null; then
+  export PATH="$(yarn global bin):$PATH"
+fi
+
+export PATH="$HOME/.local/share/bin:$HOME/.local/bin:$HOME/.local/bin/update/bin:$HOME/bin:/usr/local/bin:$HOME/.local/share/git-fuzzy/bin:$PATH"
+
+{{ if eq .osid "darwin" }}
+# Add Visual Studio Code (code)
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+{{ end }}
+
+{{ if eq .osid "darwin" }}
+############################################################
+# 1password github integration
+#[ -f ~/.config/op/plugins.sh ] && source ~/.config/op/plugins.sh
+
+# enable biometrics for 1password CLI (op)
+if type op &>/dev/null
+then
+    export OP_BIOMETRIC_UNLOCK_ENABLED=true
+fi
+############################################################
+{{ else if eq .chezmoi.os "linux" }}
+############################################################
+# enable quiet & lazy to silence ssh-agent from interrupting p10k prompt
+zstyle :omz:plugins:ssh-agent quiet yes
+zstyle :omz:plugins:ssh-agent lazy yes
+############################################################
+{{ end }}
+
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v oh-my-posh &>/dev/null; then
+  if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+    # Skip Oh My Posh entirely for Apple Terminal
+    :
+  elif [ "$TERM_PROGRAM" = "vscode" ]; then
+    # Load minimal config for VS Code
+    eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/vscode-minimal.omp.json)"
+  else
+    # Load your full theme for everything else
+    eval "$(oh-my-posh init zsh --config $XDG_CONFIG_HOME/oh-my-posh/themes/mauvehed.omp.json)"
+  fi
+fi
+
+
+{{ if .personal }}
+
+export OPENAI_API_KEY={{ onepasswordRead "op://Personal/OpenAI API Key/api key" }}
+export DIGITALOCEAN_ACCESS_TOKEN={{ onepasswordRead "op://Personal/DigitalOcean Personal Access Token/token" }}
+
+# history setup
+HISTFILE=$HOME/.zhistory
+SAVEHIST=1000
+HISTSIZE=999
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_verify
+
+# completion using arrow keys (based on history)
+#bindkey '^[[A' history-search-backward
+#bindkey '^[[B' history-search-forward
+{{ else }}
+# Don't track shell history
+unset HISTFILE
+{{ end }}
+
+# Recommended by pyenv oh-my-zsh plugin
+# if type pyenv &>/dev/null
+# then
+#   export PYENV_ROOT="$HOME/.pyenv"
+#   export PATH="$PYENV_ROOT/bin:$PATH"
+#   command -v pyenv >/dev/null && eval "$(pyenv init --path)"
+# fi
+
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+#ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# Set ohmyzsh plugins use
+plugins=(
+  {{ if eq .osid "darwin" }}macos{{ end }}
+  {{ if eq .chezmoi.os "linux" }}ssh-agent{{ end }}
+  {{ if .personal }}1password{{ end }}
+  aliases
+  tmux
+  git
+  python
+  docker
+  gitignore
+  git-auto-fetch
+  gh
+  vscode
+  aws
+  asdf
+  virtualenv
+  zsh-syntax-highlighting
+)
+
+# Update your ~/.zshrc configuration before sourcing oh-my-zsh:
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+# prevent oh-my-zsh from auto updating (updates happen via chezmoi -R apply/update)
+zstyle ':omz:update' mode disabled
+# call and load oh-my-zsh
+[ -f $ZSH/oh-my-zsh.sh ] && source $ZSH/oh-my-zsh.sh
+
+# set aliases
+[ -f ~/.aliases ] && source ~/.aliases
+
+# run uptime check to warn if over 60 days
+[ -f ~/.local/bin/check_uptime.sh ] && bash ~/.local/bin/check_uptime.sh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# execute fzf fuzzy stuff
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+#if [[ -n $fg && -n $bg && -n $purple && -n $bg_highlight && -n $blue && -n $cyan ]]; then
+#  export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
+#fi
+
+# -- Use fd instead of fzf --
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+source ~/.local/bin/fzf-git.sh
+
+show_file_or_dir_preview="bat -n --color=always {} 2>/dev/null || eza --tree --color=always {}"
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
+
+# execute asdf
+[ -f $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh ] && . $HOMEBREW_PREFIX/opt/asdf/libexec/asdf.sh
+
+# dracula theme for eza/exa
+[ -f ~/.local/share/zsh/site-functions/exa_colors.zshrc ] && . ~/.local/share/zsh/site-functions/exa_colors.zshrc
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  # initialise completions with ZSH's compinit
+  autoload -Uz compinit && compinit
+fi
+
+{{ if eq .osid "darwin" }}
+[ -f $XDG_CONFIG_HOME/iterm2/iterm2_shell_integration.zsh ] && . $XDG_CONFIG_HOME/iterm2/iterm2_shell_integration.zsh
+{{ end }}
+
+autoload -Uz add-zsh-hook
+
+#autoload -Uz chpwd_functions
+#chpwd_functions+=ensure_envrc
+
+#ensure_envrc() {
+#  if [ -d ".git" ]; then
+#    if [ ! -f ".envrc" ]; then
+#      echo "use asdf" > .envrc
+#      direnv allow
+#      echo "Created and allowed .envrc with 'use asdf' in $(pwd)"
+#    elif ! grep -q "use asdf" .envrc; then
+#      echo "use asdf" >> .envrc
+#      direnv allow
+#      echo "Updated .envrc with 'use asdf' in $(pwd)"
+#    fi
+#  fi
+#}
+
+#try_mosh_host () {
+#  local host="$1"
+#  /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /opt/homebrew/bin/mosh --server /home/linuxbrew/.linuxbrew/bin/mosh-server --server=/usr/local/bin/mosh-server "$host" -- tmux -CC new-session -A -s main 2> /dev/null || /usr/bin/ssh "$host"
+#}
+
+# setup tmux ssh alias
+ssh-tmux() {
+  local host="$1"
+  ssh -t "$host" "tmux new-session -A -s main"
+}
+
+alias tssh=ssh-tmux
+# set bold, white fg, red bg
+export GREP_COLORS='mt=1;37;41'
+
+# set bat theme
+export BAT_THEME=Dracula
+
+# Activate Python venv when entering a directory containing a ".venv" subdirectory
+activate_venv_on_cd() {
+    local venv_dir=".venv"
+    if [[ -d "$PWD/$venv_dir" ]]; then
+        echo "Loaded .venv environment.."
+        source "$PWD/$venv_dir/bin/activate"
+    fi
+}
+
+if [[ ! -o interactive || "$TERM_PROGRAM" = "vscode" ]]; then
+  unalias cd 2>/dev/null
+fi
+
+#if [ "$TERM_PROGRAM" = "vscode" ]; then
+#  unalias cd
+#fi
+
+add-zsh-hook chpwd activate_venv_on_cd

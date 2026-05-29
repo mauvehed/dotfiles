@@ -1,0 +1,109 @@
+#!/bin/bash
+
+# Define variables for paths
+OPENVPN_PATH="/usr/sbin/openvpn"
+OPENVPN_CONFIG_DIR="/etc/openvpn"
+OPENVPN_LOG_DIR="/var/log/openvpn"
+
+# Check if the script is run as root
+if [[ $EUID -ne 0 ]]; then
+    echo "Error: This script must be run as root."
+    exit 1
+fi
+
+# Function to get the PID of OpenVPN process
+get_pid() {
+    sleep 2
+    local pid=$(pidof openvpn)
+    if [[ -z "$pid" ]]; then
+        echo "OpenVPN is not running."
+    else
+        echo "The PID of OpenVPN is: $pid"
+    fi
+}
+
+# Main script starts here
+echo ""
+echo "Please choose an option:"
+echo ""
+echo "   1) GPN, UDP, No Default Route"
+echo "   2) GPN, UDP, Default Route"
+echo "   3) GPN, TCP, No Default Route"
+echo "   4) GPN, TCP, Default Route"
+echo "   5) Disconnect OpenVPN"
+echo "   6) Exit"
+echo ""
+read -p "Selection: " selection
+
+case $selection in
+    1)
+        $OPENVPN_PATH --config "${OPENVPN_CONFIG_DIR}/gpn-nate-laptop-main-udp.ovpn" \
+                      --log-append "${OPENVPN_LOG_DIR}/openvpn.log" \
+                      --status "${OPENVPN_LOG_DIR}/openvpn-status.log" \
+                      > /dev/null 2>&1 &
+        if [[ $? -eq 0 ]]; then
+            echo "Started GPN with UDP and No Default Route."
+        else
+            echo "Failed to start OpenVPN with UDP and No Default Route."
+        fi
+        get_pid
+        ;;
+    2)
+        $OPENVPN_PATH --config "${OPENVPN_CONFIG_DIR}/gpn-nate-laptop-main-udp-default.ovpn" \
+                      --log-append "${OPENVPN_LOG_DIR}/openvpn.log" \
+                      --status "${OPENVPN_LOG_DIR}/openvpn-status.log" \
+                      > /dev/null 2>&1 &
+        if [[ $? -eq 0 ]]; then
+            echo "Started GPN with UDP using Default Route."
+        else
+            echo "Failed to start OpenVPN with UDP using Default Route."
+        fi
+        get_pid
+        ;;
+    3)
+        $OPENVPN_PATH --config "${OPENVPN_CONFIG_DIR}/gpn-nate-laptop-main-tcp.ovpn" \
+                      --log-append "${OPENVPN_LOG_DIR}/openvpn.log" \
+                      --status "${OPENVPN_LOG_DIR}/openvpn-status.log" \
+                      > /dev/null 2>&1 &
+        if [[ $? -eq 0 ]]; then
+            echo "Started GPN with TCP and No Default Route."
+        else
+            echo "Failed to start OpenVPN with TCP and No Default Route."
+        fi
+        get_pid
+        ;;
+    4)
+        $OPENVPN_PATH --config "${OPENVPN_CONFIG_DIR}/gpn-nate-laptop-main-tcp-default.ovpn" \
+                      --log-append "${OPENVPN_LOG_DIR}/openvpn.log" \
+                      --status "${OPENVPN_LOG_DIR}/openvpn-status.log" \
+                      > /dev/null 2>&1 &
+        if [[ $? -eq 0 ]]; then
+            echo "Started GPN with TCP using Default Route."
+        else
+            echo "Failed to start OpenVPN with TCP using Default Route."
+        fi
+        get_pid
+        ;;
+    5)
+        if pidof openvpn > /dev/null; then
+            echo "Stopping OpenVPN processes..."
+            killall openvpn
+            if [[ $? -eq 0 ]]; then
+                echo "Successfully stopped all OpenVPN processes."
+            else
+                echo "Failed to stop OpenVPN processes."
+            fi
+        else
+            echo "No running OpenVPN processes found to stop."
+        fi
+        get_pid
+        ;;
+    6)
+        echo ""
+        echo "Why did you run the script if you're just going to exit?"
+        exit
+        ;;
+    *)
+        echo "Invalid selection. Please enter a number between 1 and 6."
+        ;;
+esac

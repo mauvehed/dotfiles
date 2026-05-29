@@ -1,0 +1,22 @@
+LICENSE
+README.md
+CLAUDE.md
+docs/
+.pre-commit-config.yaml
+.claude
+.config/btop/btop.conf
+{{ if eq .chezmoi.os "windows" }}
+*.sh
+Library
+{{ end }}
+
+{{ if eq .chezmoi.os "linux" }}
+# {{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+AppData
+Library
+# {{   end }}
+{{ end }}
+
+{{ if eq .chezmoi.os "darwin" }}
+AppData
+{{ end }}

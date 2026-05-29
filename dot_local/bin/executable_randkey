@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Default value if no argument is provided
+LENGTH=48
+
+# If the user provides one numeric argument, use it instead
+if [[ $# -eq 1 && $1 =~ ^[0-9]+$ ]]; then
+  LENGTH=$1
+elif [[ $# -gt 1 ]]; then
+  echo "Usage: $0 [length]"
+  exit 1
+fi
+
+# Run the command
+openssl rand -hex "$LENGTH"
+
