@@ -14,6 +14,7 @@ alias webtest='curl -o /dev/null -s -w "Connect time: %{time_connect}\nTotal tim
 alias oco_up='npm i -g opencommit@latest'
 alias grep="grep -d skip --color=always"
 alias mkpass="openssl rand -base64 48"
+alias pssh='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'
 command -v tailscale &>/dev/null && alias tssh="tailscale ssh"
 command -v terraform &>/dev/null && alias tf="terraform"
 command -v tldr &>/dev/null && alias man="tldr"
