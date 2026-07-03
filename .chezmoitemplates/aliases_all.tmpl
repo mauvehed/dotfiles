@@ -28,3 +28,22 @@ command -v shred &>/dev/null && alias shred="shred -zvu -n 5"
 command -v gdb &>/dev/null && alias gdb="gdb -q"
 command -v vim &>/dev/null && alias vi="vim"
 command -v podman &>/dev/null && alias docker="podman"
+if (( $+commands[netbird] )) && (( $+commands[jq] )); then
+  nbstatus() {
+    netbird status --json | jq -r '
+      ["IP", "HOSTNAME", "STATUS", "TYPE", "ENDPOINT", "LATENCY"],
+      ["──────────────", "──────────────", "──────────", "───────────", "───────────────────────", "───────"],
+      (.peers.details[] | [
+        .netbirdIp,
+        (.fqdn | split(".")[0]),
+        (.status | ascii_downcase),
+        (if .connectionType == "Relayed" then "Relayed"
+         elif .iceCandidateType.remote == "" then .connectionType
+         else .connectionType + "/" + .iceCandidateType.remote
+         end),
+        (if .iceCandidateEndpoint.remote == "" then "-" else .iceCandidateEndpoint.remote end),
+        (if .latency == 0 then "-" else ((.latency / 1000000) | round | tostring) + "ms" end)
+      ])
+    | @tsv' | column -t -s $'\t'
+  }
+fi
