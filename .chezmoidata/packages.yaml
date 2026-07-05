@@ -55,6 +55,7 @@ packages:
         - "gitleaks"
         - "gnupg"
         - "vercel-cli"
+        - "netbirdio/tap/netbird"
       casks:
       npm:
       pip:
@@ -89,10 +90,10 @@ packages:
         - "balenaetcher"
         - "connectmenow"
         - "ghostty"
+        - "netbirdio/tap/netbird-ui"
         - "postman"
         - "signal"
         - "stats"
-        - "tailscale-app"
         - "ungoogled-chromium"
         - "visual-studio-code"
         - "vscodium"
@@ -102,6 +103,7 @@ packages:
       brews:
       casks:
         - "ghostty"
+        - "netbirdio/tap/netbird-ui"
   work:
     core:
       taps:
