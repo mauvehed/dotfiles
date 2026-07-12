@@ -27,30 +27,16 @@
 {{   $ephemeral = true }}
 {{ end }}
 
+{{/* classify the machine via cached prompts (promptBoolOnce) instead of a
+     hardcoded hostname allowlist, so nothing machine-specific lives in the repo */}}
 {{ if not $ephemeral }}
-{{   if eq $hostname "cypher" }}
-{{     $personal = true }}
-{{   else if eq $hostname "airblade" }}
-{{     $personal = true }}
-{{   else if eq $hostname "computah" }}
-{{     $personal = true }}
-{{   else if eq $hostname "mauveshed" }}
-{{     $personal = true }}
-{{   else if eq $hostname "darkwing" }}
-{{     $headless = true }}
-{{     $personal = true }}
-{{   else if eq $hostname "marvin" }}
-{{     $headless = true }}
-{{     $personal = true }}
-{{   else if eq $hostname "bacula" }}
-{{     $headless = true }}
-{{     $personal = true }}
-{{   else if eq $hostname "NSANDER-3QQL0RQ" }}
-{{     $work = true }}
-{{   else if stdinIsATTY }}
+{{   if stdinIsATTY }}
 {{     $headless = promptBoolOnce . "headless" "headless" }}
 {{     $ephemeral = promptBoolOnce . "ephemeral" "ephemeral" }}
 {{     $work = promptBoolOnce . "work" "work" }}
+{{     if not $work }}
+{{       $personal = promptBoolOnce . "personal" "personal" }}
+{{     end }}
 {{   else }}
 {{     $headless = true }}
 {{   end }}
@@ -67,13 +53,12 @@ encryption = "gpg"
     personal = {{ $personal }}
     work = {{ $work }}
     osid = {{ $osID | quote }}
-    {{ if $personal }}
-    name = "mauvehed"
-    email = "nate@mvh.dev"
-    {{ else if $work }}
-    name = "Nate Sanders"
-    email = "nate.sanders@bazaarvoice.com"
+    {{/* work machines prompt for the real identity at apply time (cached
+         locally, never committed); everything else uses the pseudonym */}}
+    {{ if $work }}
+    name = {{ promptStringOnce . "name" "name" | quote }}
+    email = {{ promptStringOnce . "email" "email" | quote }}
     {{ else }}
-    name = {{ .name | quote }}
-    email = {{ .email | quote }}
+    name = "mauvehed"
+    email = "mh@mvh.dev"
     {{ end }}
