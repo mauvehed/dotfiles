@@ -4,7 +4,7 @@ packages:
       - "turbot/tap"
       - "jandedobbeleer/oh-my-posh"
       - "hashicorp/tap"
-      - "netbirdio/tap/netbird"
+      - "netbirdio/tap"
     brews:
       - "age"
       - "asdf"
