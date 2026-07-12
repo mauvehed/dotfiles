@@ -1,0 +1,23 @@
+#!/bin/bash
+
+{{ template "utils" }}
+
+{{ if and (eq .chezmoi.os "linux") (not .ephemeral) }}
+target="/usr/bin/zsh"
+user="$(id -un)"
+current="$(getent passwd "$user" | cut -d: -f7)"
+
+if [ "$current" = "$target" ]; then
+  success "Login shell already set to $target"
+elif [ ! -x "$target" ]; then
+  fail "$target not found; leaving login shell as $current"
+elif ! grep -qxF "$target" /etc/shells; then
+  # zsh's apt package registers $target in /etc/shells; -qxF matches the whole
+  # line exactly so we never append a duplicate (see git history for why)
+  fail "$target not listed in /etc/shells; leaving login shell as $current"
+else
+  info "Setting login shell to $target (was $current)"
+  sudo chsh -s "$target" "$user"
+  success "Login shell set to $target (takes effect on next login)"
+fi
+{{ end }}
