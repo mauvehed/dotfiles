@@ -14,6 +14,9 @@ export NVM_AUTO_USE=true
 export NVM_COMPLETION=true
 # Disable homebrew auto updates
 export HOMEBREW_NO_AUTO_UPDATE=true
+# Don't require `brew trust` for our third-party taps (turbot, hashicorp,
+# netbird, snyk, speedtest); newer Homebrew otherwise refuses to load them
+export HOMEBREW_NO_REQUIRE_TAP_TRUST=1
 # prevent oh-my-zsh from auto updating (updates happen via chezmoi -R apply/update)
 export DISABLE_AUTO_UPDATE="true"
 
