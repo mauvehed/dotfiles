@@ -242,6 +242,17 @@ export GREP_COLORS='mt=1;37;41'
 # set bat theme
 export BAT_THEME=Dracula
 
+# dxc -- connect to the K0MVH-1 DX cluster with the telnet session wrapped in
+# SSH. pyCluster's telnet listener has no TLS option, so a direct connection
+# sends the password (and any sysop command) in cleartext across the internet.
+# Going via hobbes means the only cleartext hop is that host's loopback, where
+# port 7300 is already published.
+#
+# -t forces a TTY, which telnet needs to behave interactively.
+dxc() {
+    ssh -t hobbes 'telnet 127.0.0.1 7300'
+}
+
 # Activate Python venv when entering a directory containing a ".venv" subdirectory
 activate_venv_on_cd() {
     local venv_dir=".venv"
