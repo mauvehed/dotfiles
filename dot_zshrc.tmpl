@@ -249,7 +249,8 @@ export BAT_THEME=Dracula
 # port 7300 is already published.
 #
 # -t forces a TTY, which telnet needs to behave interactively.
-dxc() {
+unalias dxc 2>/dev/null
+function dxc {
     ssh -t hobbes 'telnet 127.0.0.1 7300'
 }
 
