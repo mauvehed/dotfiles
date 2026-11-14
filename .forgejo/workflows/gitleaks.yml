@@ -1,0 +1,44 @@
+name: gitleaks
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 4 * * *" # run once a day at 4 AM
+env:
+  GITLEAKS_VERSION: "8.18.2" # keep in sync with .pre-commit-config.yaml
+jobs:
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: install gitleaks
+        run: |
+          set -eu
+          case "$(uname -m)" in
+            x86_64)
+              arch=x64
+              sum=6298c9235dfc9278c14b28afd9b7fa4e6f4a289cb1974bd27949fc1e9122bdee
+              ;;
+            aarch64 | arm64)
+              arch=arm64
+              sum=4df25683f95b9e1dbb8cc71dac74d10067b8aba221e7f991e01cafa05bcbd030
+              ;;
+            *)
+              echo "unsupported architecture: $(uname -m)" >&2
+              exit 1
+              ;;
+          esac
+          tarball="gitleaks_${GITLEAKS_VERSION}_linux_${arch}.tar.gz"
+          curl -fsSL -o "/tmp/${tarball}" \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${tarball}"
+          echo "${sum}  /tmp/${tarball}" | sha256sum -c -
+          mkdir -p "${HOME}/.local/bin"
+          tar -xzf "/tmp/${tarball}" -C "${HOME}/.local/bin" gitleaks
+          "${HOME}/.local/bin/gitleaks" version
+      - name: scan full history
+        run: |
+          "${HOME}/.local/bin/gitleaks" detect --source . --redact --no-banner --verbose
