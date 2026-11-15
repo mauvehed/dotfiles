@@ -90,4 +90,39 @@ for f in sorted(glob.glob(os.path.expanduser("~/.config/herdr-core/templates/*.m
     except Exception:
         continue
 out["templates"] = tpls
+# Terminals that lost their Claude session: a live hc terminal that is a plain shell
+# now, with a session recorded by the hc-session-record hook that the person did not end
+# and whose transcript still exists. After a reboot, kept terminals come back like this.
+restorable = []
+try:
+    r = subprocess.run([os.path.expanduser("~/.local/bin/hc"), "ls", "--json"], capture_output=True, text=True, timeout=20)
+    live = {t.get("address"): t for t in json.loads(r.stdout).get("terminals", [])
+            if t.get("state") == "live" and "/" not in t.get("address", "/")}
+    state = os.environ.get("XDG_STATE_HOME") or os.path.expanduser("~/.local/state")
+    for f in sorted(glob.glob(state + "/hc-sessions/*.json")):
+        try:
+            rec = json.load(open(f))
+        except Exception:
+            continue
+        t = live.get(rec.get("terminal"))
+        sid, cwd = rec.get("session") or "", rec.get("cwd") or ""
+        if not t or rec.get("ended") or t.get("agent") not in ("zsh", "bash", "sh", "fish", "dash", "ksh"):
+            continue
+        if not re.fullmatch(r"[0-9a-f-]{36}", sid):
+            continue
+        if not os.path.exists(os.path.expanduser("~/.claude/projects/" + cwd.replace("/", "-") + "/" + sid + ".jsonl")):
+            continue
+        # A terminal created after the record was written is a different terminal
+        # that happens to reuse the address: not ours to resume into.
+        try:
+            g = subprocess.run([os.path.expanduser("~/.local/bin/hc"), "get", rec["terminal"], "--json"],
+                               capture_output=True, text=True, timeout=10)
+            if json.loads(g.stdout).get("created_ms", 0) > rec.get("updated_ms", 0) > 0:
+                continue
+        except Exception:
+            pass
+        restorable.append({"terminal": rec["terminal"], "session": sid, "cwd": cwd, "where": t.get("where", "")})
+except Exception as e:
+    out["restorable_error"] = str(e)
+out["restorable"] = restorable
 print(json.dumps(out))

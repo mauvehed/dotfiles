@@ -4,7 +4,7 @@
 // props: { machine: "<name from hc machine ls>" | null, root: "<orchestration repo>", space: "<space name>" }
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input, Scrollbar } from "gpui-base";
-import { spaces, exec, readTextFile, appHome, theme, run, props, notify, checking } from "herdr";
+import { spaces, exec, hc, readTextFile, appHome, theme, run, props, notify, checking } from "herdr";
 
 const REFRESH_MS = 5 * 60 * 1000;
 
@@ -94,6 +94,36 @@ export default class Fleet extends View {
     this.arg = ""; this.argInput.set_value(""); cx.notify();
   }
 
+  // Type `claude --resume <session>` into each terminal that lost its Claude session.
+  // hc keys presses keys one by one; hc send would wrap the text in a tag a shell rejects.
+  restoreTabs(list, cx) {
+    if (this.restoring) return;
+    const { machine } = this.config();
+    const keys = (text) => [...text].map((c) => (c === " " ? "space" : c));
+    this.restoring = true; cx.notify();
+    cx.spawn(async (cx) => {
+      let done = 0;
+      const failed = [];
+      for (const r of list) {
+        const address = machine ? `${machine}/${r.terminal}` : r.terminal;
+        try {
+          // Only letters, digits and / . - are known to type cleanly; skip the cd otherwise.
+          if (/^[a-z0-9/.-]+$/.test(r.cwd)) {
+            const cd = await hc(["keys", address, ...keys(`cd ${r.cwd}`), "enter"]);
+            if (cd.code !== 0) throw new Error(cd.stderr || "cd failed");
+          }
+          const go = await hc(["keys", address, ...keys(`claude --resume ${r.session}`), "enter"]);
+          if (go.code !== 0) throw new Error(go.stderr || "keys failed");
+          done++;
+        } catch (e) { failed.push(r.where || r.terminal); }
+      }
+      notify({ title: "Fleet", level: failed.length ? "warning" : "success",
+        body: failed.length ? `Resumed ${done}; could not reach: ${failed.join(", ")}` : `Resumed ${done} Claude session${done === 1 ? "" : "s"}` });
+      this.restoring = false;
+      this.refresh(cx);
+    });
+  }
+
   openCampaign(c) {
     if (c.session) this.open(c.name, ["claude", "--resume", c.session]);
     else this.open(c.name, ["claude"], `/campaign ${c.name}`);
@@ -146,6 +176,16 @@ export default class Fleet extends View {
         onClick: () => this.open("alerts", ["claude"], "/alerts"),
       }));
     }
+    // Lost sessions: shown only when a terminal is back to a bare shell with a session to resume.
+    const lost = d.restorable ?? [];
+    if (d.restorable_error) root = root.child(div().px(14).py(4).text_size(11).text_color(t.ansi1).child(`restore check: ${d.restorable_error}`));
+    if (lost.length) root = root.child(h_flex().id("fleet-restore").mx(6).px(8).h(44).flex_none().gap(10).items_center().rounded(7).cursor_pointer()
+      .hover((s) => s.bg(t.hover)).on_click((_e, cx) => this.restoreTabs(lost, cx))
+      .child(div().w(34).flex_none().text_right().text_size(18).font_semibold().text_color(t.blocked).child(String(lost.length)))
+      .child(v_flex().flex_1().min_w(0)
+        .child(div().truncate().child(lost.length === 1 ? "tab lost its Claude session" : "tabs lost their Claude session"))
+        .child(div().truncate().text_size(11).text_color(t.dim).child(lost.map((r) => (r.where || r.terminal).split(" / ").pop()).join(", "))))
+      .child(div().flex_none().text_size(11).text_color(t.accent).child(this.restoring ? "resuming…" : "resume")));
     // CVEs
     const c = d.cve ?? {};
     if (c.error) root = root.child(div().px(14).py(4).text_size(11).text_color(t.ansi1).child(`pwn-watch: ${c.error}`));
