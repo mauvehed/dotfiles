@@ -4,7 +4,7 @@
 // props: { machine: "<name from hc machine ls>" | null, root: "<orchestration repo>", space: "<space name>" }
 import { View, div } from "gpui-kit";
 import { v_flex, h_flex, InputState, Input, Scrollbar } from "gpui-base";
-import { spaces, exec, hc, readTextFile, appHome, theme, run, props, notify, checking } from "herdr";
+import { spaces, exec, hc, readTextFile, appHome, theme, run, props, notify, checking, shared, setShared } from "herdr";
 
 const REFRESH_MS = 5 * 60 * 1000;
 
@@ -31,6 +31,10 @@ export default class Fleet extends View {
     this.argInput.on("focus", (_e, cx) => { this.argTyping = true; cx.notify(); });
     this.argInput.on("blur", (_e, cx) => { this.argTyping = false; cx.notify(); });
     if (checking()) return;
+    // Publish where this panel points, for the new-claude key mod. Only on change:
+    // setting shared state re-renders every mod.
+    const target = this.config();
+    if (JSON.stringify(shared("fleet.target") ?? null) !== JSON.stringify(target)) setShared("fleet.target", target);
     this.refresh(cx);
     cx.timer.every(REFRESH_MS, (cx) => this.refresh(cx));
   }
