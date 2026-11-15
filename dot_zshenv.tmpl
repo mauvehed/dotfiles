@@ -31,6 +31,9 @@ export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 export XDG_STATE_HOME="$HOME/.local/state"
 {{ if eq .osid "darwin" }}
 export XDG_RUNTIME_DIR="$TMPDIR"
+# herdr-core: the Herdr app starts the core under launchd, which has no
+# XDG_RUNTIME_DIR, so it listens under XDG_STATE_HOME. Point hc at that socket.
+export HC_SOCKET="$XDG_STATE_HOME/herdr-core/default/default.sock"
 {{ else if not .headless }}
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 {{ else }}
