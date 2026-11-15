@@ -20,3 +20,8 @@ Library
 {{ if eq .chezmoi.os "darwin" }}
 AppData
 {{ end }}
+
+{{/* Herdr desktop app config: personal Macs with a screen only */}}
+{{ if not (and .personal (eq .chezmoi.os "darwin") (not .headless)) }}
+.config/herdr-app
+{{ end }}

@@ -90,6 +90,7 @@ packages:
         - "balenaetcher"
         - "connectmenow"
         - "ghostty"
+        - "herdr-app"
         - "netbirdio/tap/netbird-ui"
         - "postman"
         - "signal"
