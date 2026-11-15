@@ -124,6 +124,13 @@ export default class Fleet extends View {
     });
   }
 
+  // A fresh Claude in the orchestration folder, as a new unnamed tab in this panel's space.
+  newClaude() {
+    const { machine, root, space } = this.config(), home = this.home();
+    if (home) { run("space.select", { id: home.id }); run("tab.new", { space: home.id, folder: root, argv: ["claude"] }); }
+    else run("space.new", { name: space, machine: machine ?? "", folder: root, argv: ["claude"] });
+  }
+
   openCampaign(c) {
     if (c.session) this.open(c.name, ["claude", "--resume", c.session]);
     else this.open(c.name, ["claude"], `/campaign ${c.name}`);
@@ -154,6 +161,8 @@ export default class Fleet extends View {
       .child(div().font_semibold().child("Fleet"))
       .child(div().px(5).py(1).rounded(4).border_1().border_color(t.border).text_size(10).text_color(t.muted).child(machine ?? "this computer"))
       .child(div().flex_1())
+      .child(div().id("fleet-new").px(8).py(2).rounded(5).border_1().border_color(t.border).text_size(11).cursor_pointer()
+        .hover((s) => s.bg(t.hover)).on_click(() => this.newClaude()).child("+ Claude"))
       .child(div().id("fleet-refresh").px(6).py(2).rounded(5).text_size(11).text_color(t.dim).cursor_pointer()
         .hover((s) => s.bg(t.hover)).on_click((_e, cx) => this.refresh(cx))
         .child(this.loading ? "refreshing…" : this.loaded ? `↻ ${ago(this.loaded)}` : "↻ refresh"));
